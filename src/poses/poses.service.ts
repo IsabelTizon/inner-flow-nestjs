@@ -33,4 +33,15 @@ export class PosesService {
         'Estira la espalda y fortalece los brazospara hacer el erro boca medio.',
     },
   ];
+  getAll(): Poses[] {
+    return this.poses;
+  }
+
+  getOne(id: string): Poses | undefined {
+    return this.poses.find((pose) => pose.id === id);
+  }
+
+  add(poses: Poses): void {
+    this.poses.push(poses);
+  }
 }
