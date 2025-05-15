@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { PosesService, Poses } from './poses.service';
+import { PosesService, Poses } from '../poses.service';
 
 @Controller('poses')
 export class PosesController {
