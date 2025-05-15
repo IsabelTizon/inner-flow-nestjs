@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
 import { PosesService, Poses } from '../poses.service';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('poses')
 export class PosesController {
@@ -11,12 +12,16 @@ export class PosesController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): Poses | undefined {
+  getOne(@Param('id', ParseUUIDPipe) id: string): Poses | undefined {
     return this.posesService.getOne(id);
   }
 
   @Post()
   addPose(@Body() pose: Poses): void {
     this.posesService.add(pose);
+  }
+  @Delete(':id')
+  deletePose(@Param('id', ParseUUIDPipe) id: string): void {
+    this.posesService.delete(id);
   }
 }

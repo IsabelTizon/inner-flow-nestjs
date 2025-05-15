@@ -44,4 +44,8 @@ export class PosesService {
   add(poses: Poses): void {
     this.poses.push(poses);
   }
+  delete(id: string): void {
+    console.log('Deleting pose with id:', id);
+    this.poses = this.poses.filter((pose) => pose.id !== id);
+  }
 }
