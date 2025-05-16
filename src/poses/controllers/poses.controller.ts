@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
-import { PosesService, Poses } from '../poses.service';
+import { PosesService, Poses } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
 
 @Controller('poses')
