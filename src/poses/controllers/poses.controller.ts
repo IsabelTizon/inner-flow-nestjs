@@ -12,7 +12,7 @@ export class PosesController {
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseUUIDPipe) id: string): Poses | undefined {
+  getOne(@Param('id', new ParseUUIDPipe()) id: string): Poses | undefined {
     return this.posesService.getOne(id);
   }
 

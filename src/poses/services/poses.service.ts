@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { NotFoundException } from '@nestjs/common';
 
 export interface Poses {
   id: string;
@@ -10,6 +11,7 @@ export interface Poses {
 
 @Injectable()
 export class PosesService {
+  // poses DDBB simulator
   private poses: Poses[] = [
     {
       id: uuidv4(),
@@ -33,12 +35,21 @@ export class PosesService {
         'Estira la espalda y fortalece los brazospara hacer el erro boca medio.',
     },
   ];
+
+  //
   getAll(): Poses[] {
     return this.poses;
   }
 
   getOne(id: string): Poses | undefined {
-    return this.poses.find((pose) => pose.id === id);
+    console.log(`Getting pose with id: ${id}`);
+    const pose = this.poses.find((pose) => pose.id === id);
+
+    if (!pose) {
+      console.log(`Pose with id ${id} not found`);
+      throw new NotFoundException(`Pose with id ${id} not found`);
+    }
+    return pose;
   }
 
   add(poses: Poses): void {
