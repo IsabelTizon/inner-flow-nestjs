@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundException } from '@nestjs/common';
+import { addPoseDto } from '../dtos/add-pose.dto';
 
 export interface Poses {
   id: string;
@@ -52,9 +53,14 @@ export class PosesService {
     return pose;
   }
 
-  add(poses: Poses): void {
-    this.poses.push(poses);
+  addPose(poseDto: addPoseDto): void {
+    const newPose: Poses = {
+      id: uuidv4(),
+      ...poseDto,
+    };
+    this.poses.push(newPose);
   }
+
   delete(id: string): void {
     console.log('Deleting pose with id:', id);
     this.poses = this.poses.filter((pose) => pose.id !== id);

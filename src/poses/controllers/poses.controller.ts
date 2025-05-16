@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
 import { PosesService, Poses } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { addPoseDto } from '../dtos/add-pose.dto';
 
 @Controller('poses')
 export class PosesController {
@@ -17,9 +18,10 @@ export class PosesController {
   }
 
   @Post()
-  addPose(@Body() pose: Poses): void {
-    this.posesService.add(pose);
+  addPose(@Body() pose: addPoseDto): void {
+    this.posesService.addPose(pose);
   }
+
   @Delete(':id')
   deletePose(@Param('id', ParseUUIDPipe) id: string): void {
     this.posesService.delete(id);
