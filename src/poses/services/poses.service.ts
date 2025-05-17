@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundException } from '@nestjs/common';
-import { poseDto } from '../dtos/add-pose.dto';
+import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 
 export interface Poses {
   id: string;
@@ -13,7 +13,7 @@ export interface Poses {
 @Injectable()
 export class PosesService {
   // poses DDBB simulator
-  private poses: Poses[] = [
+  private posesDDBB: Poses[] = [
     {
       id: uuidv4(),
       name: 'Perro boca abajo',
@@ -39,12 +39,12 @@ export class PosesService {
 
   //
   getAll(): Poses[] {
-    return this.poses;
+    return this.posesDDBB;
   }
 
   getOne(id: string): Poses | undefined {
     console.log(`Getting pose with id: ${id}`);
-    const pose = this.poses.find((pose) => pose.id === id);
+    const pose = this.posesDDBB.find((pose) => pose.id === id);
 
     if (!pose) {
       console.log(`Pose with id ${id} not found`);
@@ -53,28 +53,28 @@ export class PosesService {
     return pose;
   }
 
-  addPose(poseDto: poseDto): void {
+  addPose(poseDto: createPoseDto): void {
     const newPose: Poses = {
       id: uuidv4(),
       ...poseDto,
     };
-    this.poses.push(newPose);
+    this.posesDDBB.push(newPose);
   }
 
   delete(id: string): void {
     console.log('Deleting pose with id:', id);
-    this.poses = this.poses.filter((pose) => pose.id !== id);
+    this.posesDDBB = this.posesDDBB.filter((pose) => pose.id !== id);
   }
 
-  update(id: string, poseDto: poseDto): void {
-    const i = this.poses.findIndex((p) => p.id === id);
+  update(id: string, poseDto: updatePoseDto): void {
+    const i = this.posesDDBB.findIndex((p) => p.id === id);
 
     if (i === -1) {
       throw new NotFoundException(`Pose with id ${id} not found`);
     }
 
-    this.poses[i] = {
-      ...this.poses[i],
+    this.posesDDBB[i] = {
+      ...this.posesDDBB[i],
       ...poseDto,
     };
   }

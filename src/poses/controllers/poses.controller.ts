@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { PosesService, Poses } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
-import { poseDto } from '../dtos/add-pose.dto';
+import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 
 @Controller('poses')
 export class PosesController {
@@ -26,7 +26,7 @@ export class PosesController {
   }
 
   @Post()
-  addPose(@Body() pose: poseDto): void {
+  addPose(@Body() pose: createPoseDto): void {
     this.posesService.addPose(pose);
   }
 
@@ -38,7 +38,7 @@ export class PosesController {
   @Patch(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() pose: poseDto,
+    @Body() pose: updatePoseDto,
   ): void {
     this.posesService.update(id, pose);
   }
