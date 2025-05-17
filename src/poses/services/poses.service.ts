@@ -19,21 +19,21 @@ export class PosesService {
       name: 'Perro boca abajo',
       image: 'downward-dog-abajo.jpg',
       description:
-        'Estira la espalda y fortalece los brazospara hacer el erro boca abajo.',
+        'Estira la espalda y fortalece los brazos para hacer el perro boca abajo.',
     },
     {
       id: uuidv4(),
       name: 'Perro boca arriba',
       image: 'downward-dog-arriba.jpg',
       description:
-        'Estira la espalda y fortalece los brazos para hacer el erro boca arriba.',
+        'Estira la espalda y fortalece los brazos para hacer el perro boca arriba.',
     },
     {
       id: uuidv4(),
       name: 'Perro boca medio',
       image: 'downward-dog-medio.jpg',
       description:
-        'Estira la espalda y fortalece los brazospara hacer el erro boca medio.',
+        'Estira la espalda y fortalece los brazos para hacer el perro boca medio.',
     },
   ];
 
@@ -79,12 +79,18 @@ export class PosesService {
     };
   }
   searchByName(name: string): Poses[] {
-    if (!name) return this.posesDDBB;
+    if (!name) return [];
 
-    const normalizedName = name.replace(/-/g, ' ').toLowerCase();
+    const normalize = (text: string) =>
+      text
+        .trim()
+        .replace(/[-\s]+/g, ' ')
+        .toLowerCase();
 
-    return this.posesDDBB.filter((pose) =>
-      pose.name.toLowerCase().includes(normalizedName),
+    const normalizedName = normalize(name);
+
+    return this.posesDDBB.filter(
+      (pose) => normalize(pose.name) === normalizedName,
     );
   }
 }

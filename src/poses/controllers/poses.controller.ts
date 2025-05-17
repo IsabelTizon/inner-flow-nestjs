@@ -11,6 +11,7 @@ import {
 import { PosesService, Poses } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Controller('poses')
 export class PosesController {
@@ -18,7 +19,13 @@ export class PosesController {
 
   @Get('search')
   searchPoses(@Query('name') name: string): Poses[] {
-    return this.posesService.searchByName(name);
+    const results = this.posesService.searchByName(name);
+
+    if (results.length === 0) {
+      throw new NotFoundException(`No pose found with the name "${name}"`);
+    }
+
+    return results;
   }
   @Get()
   getAll(): Poses[] {
