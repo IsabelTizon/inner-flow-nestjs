@@ -1,5 +1,5 @@
 import { IsString, Length } from 'class-validator';
-export class addPoseDto {
+export class poseDto {
   @IsString()
   @Length(3, 30)
   readonly name: string;
