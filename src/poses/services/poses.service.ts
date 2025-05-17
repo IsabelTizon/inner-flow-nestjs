@@ -78,4 +78,13 @@ export class PosesService {
       ...poseDto,
     };
   }
+  searchByName(name: string): Poses[] {
+    if (!name) return this.posesDDBB;
+
+    const normalizedName = name.replace(/-/g, ' ').toLowerCase();
+
+    return this.posesDDBB.filter((pose) =>
+      pose.name.toLowerCase().includes(normalizedName),
+    );
+  }
 }

@@ -6,6 +6,7 @@ import {
   Body,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { PosesService, Poses } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
@@ -15,6 +16,10 @@ import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 export class PosesController {
   constructor(private readonly posesService: PosesService) {}
 
+  @Get('search')
+  searchPoses(@Query('name') name: string): Poses[] {
+    return this.posesService.searchByName(name);
+  }
   @Get()
   getAll(): Poses[] {
     return this.posesService.getAll();
