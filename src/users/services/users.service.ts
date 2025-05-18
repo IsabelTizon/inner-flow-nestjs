@@ -21,10 +21,10 @@ export class UsersService {
     this.users.push(newUser);
     console.log('New user registered:', newUser);
     return newUser;
+  }
 
-    // getUserSequences(userId: string) {
-    //   const user = this.users.find((u) => u.id === userId);
-    //   return user?.sequences || [];
-    // }
+  getUserSequences(userId: string) {
+    const user = this.users.find((u) => u.id === userId);
+    return user?.sequences || [];
   }
 }
