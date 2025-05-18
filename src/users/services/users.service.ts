@@ -1,31 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { Poses } from 'src/poses/models/poses.model';
+import { CreateUserDto } from '../dtos/createUser.dto';
+import { User } from '../models/user.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
-  private posesDDBB: Poses[] = [
-    // poses DDBB simulator
-    {
+  private users: User[] = [];
+
+  createUser(createUserDto: CreateUserDto): User {
+    const { name, email, password } = createUserDto;
+
+    const newUser: User = {
       id: uuidv4(),
-      name: 'Perro boca abajo',
-      image: 'downward-dog-abajo.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca abajo.',
-    },
-    {
-      id: uuidv4(),
-      name: 'Perro boca arriba',
-      image: 'downward-dog-arriba.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca arriba.',
-    },
-    {
-      id: uuidv4(),
-      name: 'Perro boca medio',
-      image: 'downward-dog-medio.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca medio.',
-    },
-  ];
+      name,
+      email,
+      password,
+      sequences: [],
+    };
+
+    this.users.push(newUser);
+    console.log('New user registered:', newUser);
+    return newUser;
+
+    // getUserSequences(userId: string) {
+    //   const user = this.users.find((u) => u.id === userId);
+    //   return user?.sequences || [];
+    // }
+  }
 }
