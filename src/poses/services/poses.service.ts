@@ -44,7 +44,7 @@ export class PosesService {
 
   getOne(id: string): Poses | undefined {
     console.log(`Getting pose with id: ${id}`);
-    const pose = this.posesDDBB.find((pose) => pose.id === id);
+    const pose = this.posesDDBB.find((p) => p.id === id);
 
     if (!pose) {
       console.log(`Pose with id ${id} not found`);
