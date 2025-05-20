@@ -1,4 +1,4 @@
-import { Sequence } from 'src/sequences/models/sequence.model';
+import { Sequence } from 'src/users/models/sequence.model';
 
 export class User {
   id: string;

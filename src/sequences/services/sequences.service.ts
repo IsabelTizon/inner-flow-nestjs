@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Sequence } from '../models/sequence.model';
+import { Sequence } from '../../users/models/sequence.model';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateSequenceDto, UpdateSequenceDto } from '../dtos/sequence.dto';
+import {
+  CreateSequenceDto,
+  UpdateSequenceDto,
+} from '../../users/dtos/sequence.dto';
 import { PosesService } from '../../poses/services/poses.service';
 // import { Poses }: Imports the pose service, which is needed to look up poses referenced by ID in sequences
 import { Poses } from '../../poses/models/poses.model';

@@ -1,19 +1,24 @@
-import { Body, Controller, Post, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
-import { SequencesService } from '../../sequences/services/sequences.service';
+import { UpdateSequenceDto } from '../dtos/sequence.dto';
 import { CreateUserDto } from '../dtos/createUser.dto';
 import { User } from '../models/user.model';
 import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
-import { CreateSequenceDto } from '../../sequences/dtos/sequence.dto';
+import { Sequence } from '../models/sequence.model';
 
 // url path: /users
 @Controller('users')
 export class UsersController {
   //Injects the UsersService service to apply dependency injection.
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly sequencesService: SequencesService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   // url path: //users/register
   @Post('register')
@@ -25,14 +30,6 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Post(':userId/sequences')
-  createUserSequence(
-    @Param('userId', ParseUUIDPipe) userId: string,
-    @Body(new ValidationPipe()) dto: CreateSequenceDto,
-  ) {
-    return this.sequencesService.createSequence({ ...dto, userId });
-  }
-
   // url path: /users/123/sequences
   @Get(':id/sequences')
   //@Param('id') userId: Take the URL parameter called id and store it in the userId variable
@@ -41,5 +38,25 @@ export class UsersController {
   getUserSequences(@Param('id') userId: string) {
     //Call the service to get the user's strings with that ID and return them.
     return this.usersService.getUserSequences(userId);
+  }
+
+  @Get(':id/sequences/:id/')
+  getOneSequence(@Param('id', ParseUUIDPipe) id: string): Sequence | undefined {
+    return this.usersService.getOneSequence(id);
+  }
+
+  @Delete(':id/sequences/:id/')
+  // ParseUUIDPipe: Automatically validate that the value received as a parameter is a valid UUID.
+  deleteSequence(@Param('id', ParseUUIDPipe) id: string): void {
+    this.usersService.deleteSequence(id);
+  }
+
+  @Patch(':id/sequences/:id/')
+  updateSequence(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body(new ValidationPipe())
+    updateDto: UpdateSequenceDto,
+  ): void {
+    this.usersService.updateSequence(id, updateDto);
   }
 }
