@@ -37,8 +37,7 @@ export class UsersService {
   }
 
   getUserSequences(userId: string) {
-    const user = this.users.find((u) => u.id === userId);
-    return user?.sequences || [];
+    return this.sequencesDDBB.filter((sequence) => sequence.userId === userId);
   }
 
   // CREATE A SEQUENCE
