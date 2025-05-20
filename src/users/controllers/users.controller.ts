@@ -1,13 +1,19 @@
 import { Body, Controller, Post, Get, Param } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
+import { SequencesService } from '../../sequences/services/sequences.service';
 import { CreateUserDto } from '../dtos/createUser.dto';
 import { User } from '../models/user.model';
+import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
+import { CreateSequenceDto } from '../../sequences/dtos/sequence.dto';
 
 // url path: /users
 @Controller('users')
 export class UsersController {
   //Injects the UsersService service to apply dependency injection.
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly sequencesService: SequencesService,
+  ) {}
 
   // url path: //users/register
   @Post('register')
@@ -17,6 +23,14 @@ export class UsersController {
   createUser(@Body() createUserDto: CreateUserDto): User {
     //Calls the usersService service to create the user and returns the result.
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Post(':userId/sequences')
+  createUserSequence(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Body(new ValidationPipe()) dto: CreateSequenceDto,
+  ) {
+    return this.sequencesService.createSequence({ ...dto, userId });
   }
 
   // url path: /users/123/sequences
