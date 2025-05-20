@@ -40,23 +40,25 @@ export class UsersController {
     return this.usersService.getUserSequences(userId);
   }
 
-  @Get(':id/sequences/:id/')
-  getOneSequence(@Param('id', ParseUUIDPipe) id: string): Sequence | undefined {
-    return this.usersService.getOneSequence(id);
+  @Get(':id/sequences/:sequenceId')
+  getOneSequence(
+    @Param('sequenceId', ParseUUIDPipe) sequenceId: string,
+  ): Sequence | undefined {
+    return this.usersService.getOneSequence(sequenceId);
   }
 
-  @Delete(':id/sequences/:id/')
+  @Delete(':id/sequences/:sequenceId')
   // ParseUUIDPipe: Automatically validate that the value received as a parameter is a valid UUID.
-  deleteSequence(@Param('id', ParseUUIDPipe) id: string): void {
-    this.usersService.deleteSequence(id);
+  deleteSequence(@Param('sequenceId', ParseUUIDPipe) sequenceId: string): void {
+    this.usersService.deleteSequence(sequenceId);
   }
 
-  @Patch(':id/sequences/:id/')
+  @Patch(':id/sequences/:sequenceId')
   updateSequence(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('sequenceId', new ParseUUIDPipe()) sequenceId: string,
     @Body(new ValidationPipe())
     updateDto: UpdateSequenceDto,
   ): void {
-    this.usersService.updateSequence(id, updateDto);
+    this.usersService.updateSequence(sequenceId, updateDto);
   }
 }
