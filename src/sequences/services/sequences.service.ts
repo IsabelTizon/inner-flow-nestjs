@@ -42,8 +42,8 @@ export class SequencesService {
   }
 
   // GET ALL THE USER SEQUENCES
-  getAllSequences(): Sequence[] {
-    return this.sequencesDDBB;
+  getSequencesByUserId(userId: string): Sequence[] {
+    return this.sequencesDDBB.filter((sequence) => sequence.userId === userId);
   }
 
   // GET A SEQUENCE BY ID

@@ -18,12 +18,12 @@ export class SequencesController {
   constructor(private readonly sequences: SequencesService) {}
 
   @Get()
-  getAllSequences(): Sequence[] {
-    return this.sequences.getAllSequences();
+  getUserSequences(@Param('userId') userId: string): Sequence[] {
+    return this.sequences.getSequencesByUserId(userId);
   }
 
   @Get(':id')
-  getOneSequence(@Param('id') id: string): Sequence | undefined {
+  getOneSequence(@Param('id', ParseUUIDPipe) id: string): Sequence | undefined {
     return this.sequences.getOneSequence(id);
   }
 

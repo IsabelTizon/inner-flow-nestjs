@@ -8,6 +8,7 @@ export class CreateSequenceDto {
   @IsArray()
   @IsUUID('4', { each: true })
   readonly poses: string[];
+
   @IsString()
   @IsUUID()
   readonly userId: string;
