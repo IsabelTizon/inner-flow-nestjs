@@ -10,6 +10,7 @@ import {
 import { UsersService } from '../services/users.service';
 import { UpdateSequenceDto } from '../dtos/sequence.dto';
 import { CreateUserDto } from '../dtos/createUser.dto';
+import { CreateSequenceDto } from '../dtos/sequence.dto';
 import { User } from '../models/user.model';
 import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
 import { Sequence } from '../models/sequence.model';
@@ -28,6 +29,16 @@ export class UsersController {
   createUser(@Body() createUserDto: CreateUserDto): User {
     //Calls the usersService service to create the user and returns the result.
     return this.usersService.createUser(createUserDto);
+  }
+
+  //
+  @Post(':id/sequences')
+  createSequence(
+    @Param('id', ParseUUIDPipe) userId: string,
+    @Body(new ValidationPipe()) sequenceDto: CreateSequenceDto,
+  ): Sequence {
+    sequenceDto.userId = userId;
+    return this.usersService.createSequence(sequenceDto);
   }
 
   // url path: /users/123/sequences
@@ -58,7 +69,7 @@ export class UsersController {
     @Param('sequenceId', new ParseUUIDPipe()) sequenceId: string,
     @Body(new ValidationPipe())
     updateDto: UpdateSequenceDto,
-  ): void {
+  ) {
     this.usersService.updateSequence(sequenceId, updateDto);
   }
 }

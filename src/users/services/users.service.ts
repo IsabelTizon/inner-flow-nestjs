@@ -43,9 +43,8 @@ export class UsersService {
 
   // CREATE A SEQUENCE
   // sequenceDto.poses is an array of strings ['pose1', 'pose2', 'pose3'].
-  createSequence(sequenceDto: CreateSequenceDto): void {
+  createSequence(sequenceDto: CreateSequenceDto): Sequence {
     const poses: Poses[] = sequenceDto.poses
-      //.map((poseId) => { ... }): For each poseId, it attempts to find the actual pose using posesService.getOne(poseId). If there's an error (e.g., no such ID exists), it returns undefined.
       .map((poseId) => {
         try {
           return this.posesService.getOne(poseId);
@@ -53,10 +52,8 @@ export class UsersService {
           return undefined;
         }
       })
-      // filter undefined values to ensure that only valid poses are included in the new sequence.
       .filter((p): p is Poses => p !== undefined);
 
-    // Creates a newsequence object
     const newSequence: Sequence = {
       id: uuidv4(),
       name: sequenceDto.name,
@@ -65,6 +62,13 @@ export class UsersService {
     };
 
     this.sequencesDDBB.push(newSequence);
+
+    const user = this.users.find((u) => u.id === sequenceDto.userId);
+    if (user) {
+      user.sequences.push(newSequence);
+    }
+
+    return newSequence;
   }
 
   // GET ALL THE USER SEQUENCES
@@ -88,21 +92,27 @@ export class UsersService {
   // 💡 UPDATE A SEQUENCE BY ID
   // The void type indicates that the function returns nothing.
   // Receives 2 parameters: id and updateDto
-  updateSequence(id: string, updateDto: UpdateSequenceDto): void {
+  updateSequence(
+    id: string,
+    updateDto: UpdateSequenceDto,
+  ): Sequence | undefined {
     //Find the index
     const i = this.sequencesDDBB.findIndex((s) => s.id === id);
     // If there is not a sequence with that id just skip the function
-    if (i === -1) return;
-
+    if (i === -1) {
+      console.log('Sequence not found: ', id);
+      return;
+    }
     //Saves the current sequence (before updating it), so that its data can be used if not all fields are updated.
     const existingSequence = this.sequencesDDBB[i];
+    console.log('Sequence before updated:', existingSequence);
 
     // new variables to store the updated poses
     // updatedPoses: Poses[] | undefined;: This means that updatedPoses can either be an array of Poses or undefined.
     let updatedPoses: Poses[] | undefined;
 
     // updateDto.poses is an array of strings ['pose1', 'pose2', 'pose3'].
-    if (updateDto.poses) {
+    if (Array.isArray(updateDto.poses)) {
       updatedPoses = updateDto.poses
         .map((poseId) => {
           try {
@@ -116,10 +126,16 @@ export class UsersService {
     }
 
     // We use the spread operator (...existingSequence) to copy your previous data.
-    this.sequencesDDBB[i] = {
+    const updatedSequence = {
       ...existingSequence,
       name: updateDto.name ?? existingSequence.name,
       poses: updatedPoses ?? existingSequence.poses,
     };
+
+    this.sequencesDDBB[i] = updatedSequence;
+
+    console.log('Sequence updated:', updatedSequence);
+
+    return updatedSequence;
   }
 }
