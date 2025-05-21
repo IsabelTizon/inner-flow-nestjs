@@ -46,8 +46,10 @@ export class UsersService {
     const poses: Poses[] = sequenceDto.poses
       .map((poseId) => {
         try {
+          console.log(`pose with id ${poseId} found`);
           return this.posesService.getOne(poseId);
         } catch {
+          console.log(`pose with id ${poseId} NOT found`);
           return undefined;
         }
       })

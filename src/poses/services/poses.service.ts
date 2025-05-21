@@ -36,7 +36,22 @@ export class PosesService {
         'Estira la espalda y fortalece los brazos para hacer el perro boca medio.',
     },
   ];
-
+  constructor() {
+    this.posesDDBB = [
+      {
+        id: '05393d7d-74e6-4c08-ab22-44bd203ab63a',
+        name: 'Downward Dog',
+        description: 'An inverted V-shaped pose.',
+        image: 'https://...',
+      },
+      {
+        id: 'b03d7bf2-2d47-48ec-b221-517800f03b6f',
+        name: "Child's Pose",
+        description: 'A resting pose.',
+        image: 'https://...',
+      },
+    ];
+  }
   //
   getAll(): Poses[] {
     return this.posesDDBB;
