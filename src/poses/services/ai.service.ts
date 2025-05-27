@@ -13,7 +13,9 @@ export class AIService {
     }
 
     const response = await axios.post<OpenAIResponse>(
+      //url
       'https://api.openai.com/v1/chat/completions',
+      // data,
       {
         model: 'gpt-4-turbo',
         messages: [
@@ -23,6 +25,7 @@ export class AIService {
           },
         ],
       },
+      //
       {
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +33,7 @@ export class AIService {
         },
       },
     );
-
+    console.log(response.data.choices[0].message.content);
     return response.data.choices[0].message.content;
   }
 }

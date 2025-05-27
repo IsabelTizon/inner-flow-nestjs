@@ -73,10 +73,15 @@ export class PosesService {
 
   // CREATE A NEW POSE
   async addPose(poseDto: createPoseDto): Promise<Poses> {
+    const description = poseDto.description.trim()
+      ? poseDto.description
+      : await this.description.createDescription(poseDto);
+
     const newPose: Poses = {
       id: uuidv4(),
-      ...poseDto,
-      description: await this.description.createDescription(poseDto),
+      name: poseDto.name,
+      image: poseDto.image,
+      description,
     };
     this.posesDDBB.push(newPose);
     return newPose;
