@@ -4,7 +4,15 @@ import axios from 'axios';
 @Injectable()
 export class AIService {
   async ask(prompt: string): Promise<string> {
-    const response = await axios.post(
+    interface OpenAIResponse {
+      choices: {
+        message: {
+          content: string;
+        };
+      }[];
+    }
+
+    const response = await axios.post<OpenAIResponse>(
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-4-turbo',
@@ -18,7 +26,7 @@ export class AIService {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.GEMINI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       },
     );
