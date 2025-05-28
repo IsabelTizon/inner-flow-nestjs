@@ -8,7 +8,7 @@ export class DescriptionService {
 
   async createDescription(poseDto: createPoseDto): Promise<string> {
     const response = await this.aiService.ask(
-      `Create a description of ${poseDto.name}`,
+      `Give me the description of ${poseDto.name} in yoga.`,
     );
 
     return response;
