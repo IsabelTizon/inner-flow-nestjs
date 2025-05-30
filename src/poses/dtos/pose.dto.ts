@@ -5,6 +5,7 @@ export class createPoseDto {
   @Length(3, 30)
   readonly name: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   readonly description: string;
