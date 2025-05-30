@@ -17,9 +17,10 @@ import { NotFoundException } from '@nestjs/common';
 export class PosesController {
   constructor(private readonly posesService: PosesService) {}
 
+  // Search for poses by name
   @Get('search')
-  searchPoses(@Query('name') name: string): Poses[] {
-    const results = this.posesService.searchByName(name);
+  async searchPoses(@Query('name') name: string): Promise<Poses[]> {
+    const results = await this.posesService.searchByName(name);
 
     if (results.length === 0) {
       throw new NotFoundException(`No pose found with the name "${name}"`);
@@ -27,31 +28,39 @@ export class PosesController {
 
     return results;
   }
+
+  // CRUD operations for poses
+
+  // Get all poses
   @Get()
-  getAll(): Poses[] {
-    return this.posesService.getAll();
+  async getAll(): Promise<Poses[]> {
+    return await this.posesService.getAll();
   }
 
+  // Get one pose by ID
   @Get(':id')
-  getOne(@Param('id', new ParseUUIDPipe()) id: string): Poses | undefined {
-    return this.posesService.getOne(id);
+  async getOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<Poses> {
+    return await this.posesService.getOne(id);
   }
 
+  // Create a new pose
   @Post()
-  addPose(@Body() pose: createPoseDto): void {
-    this.posesService.addPose(pose);
+  async addPose(@Body() pose: createPoseDto): Promise<Poses> {
+    return await this.posesService.addPose(pose);
   }
 
+  // Delete a pose by ID
   @Delete(':id')
-  deletePose(@Param('id', ParseUUIDPipe) id: string): void {
-    this.posesService.delete(id);
+  async deletePose(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return await this.posesService.delete(id);
   }
 
+  // Update a pose by ID
   @Patch(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() pose: updatePoseDto,
-  ): void {
-    this.posesService.update(id, pose);
+  ): Promise<void> {
+    await this.posesService.update(id, pose);
   }
 }

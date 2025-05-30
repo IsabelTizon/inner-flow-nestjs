@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { NotFoundException } from '@nestjs/common';
 import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 import { DescriptionService } from './description.service';
+import * as sqlite3 from 'sqlite3';
 
 export interface Poses {
   id: string;
@@ -13,62 +14,74 @@ export interface Poses {
 
 @Injectable()
 export class PosesService {
-  constructor(private readonly description: DescriptionService) {}
-  // poses DDBB simulator
-  private posesDDBB: Poses[] = [
-    {
-      id: uuidv4(),
-      name: 'Perro boca abajo',
-      image: 'downward-dog-abajo.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca abajo.',
-    },
-    {
-      id: uuidv4(),
-      name: 'Perro boca arriba',
-      image: 'downward-dog-arriba.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca arriba.',
-    },
-    {
-      id: uuidv4(),
-      name: 'Perro boca medio',
-      image: 'downward-dog-medio.jpg',
-      description:
-        'Estira la espalda y fortalece los brazos para hacer el perro boca medio.',
-    },
-  ];
-  // constructor() {
-  //   this.posesDDBB = [
-  //     {
-  //       id: '05393d7d-74e6-4c08-ab22-44bd203ab63a',
-  //       name: 'Downward Dog',
-  //       description: 'An inverted V-shaped pose.',
-  //       image: 'https://...',
-  //     },
-  //     {
-  //       id: 'b03d7bf2-2d47-48ec-b221-517800f03b6f',
-  //       name: "Child's Pose",
-  //       description: 'A resting pose.',
-  //       image: 'https://...',
-  //     },
-  //   ];
-  // }
+  constructor(private readonly description: DescriptionService) {
+    this.database = new sqlite3.Database('yogaDDBB.sqlite', (error) => {
+      if (error) {
+        console.error('Error opening yoga DDBB:');
+        return;
+      }
+
+      this.database.run(
+        `CREATE TABLE IF NOT EXISTS poses (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        image TEXT NOT NULL
+        )
+        `,
+        (error) => {
+          if (error) {
+            console.error('Error creating poses table:', error);
+            return;
+          }
+          console.log('poses table on yoga DDBB was correctly created');
+        },
+      );
+    });
+  }
+
+  private posesDDBB: Poses[] = [];
+  private database: sqlite3.Database;
+
   // GET ALL THE POSES
-  getAll(): Poses[] {
-    return this.posesDDBB;
+  async getAll(): Promise<Poses[]> {
+    return new Promise((resolve, reject) => {
+      this.database.all(`SELECT * FROM poses`, [], (err, rows) => {
+        if (err) {
+          console.error('Error retrieving all poses:', err);
+          return reject(err);
+        }
+        resolve(rows as Poses[]);
+      });
+    });
   }
 
   // GET ONE POSE BY ID
-  getOne(id: string): Poses | undefined {
+  async getOne(id: string): Promise<Poses> {
     console.log(`Getting pose with id: ${id}`);
-    const pose = this.posesDDBB.find((p) => p.id === id);
 
-    if (!pose) {
-      console.log(`Pose with id ${id} not found`);
-      throw new NotFoundException(`Pose with id ${id} not found`);
-    }
-    return pose;
+    return new Promise((resolve, reject) => {
+      this.database.get(
+        `SELECT * FROM poses WHERE id = ?`,
+        [id],
+        (error, row) => {
+          if (error) {
+            console.error('Error fetching pose from database:', error);
+            return reject(
+              new NotFoundException(`Pose with id ${id} not found`),
+            );
+          }
+
+          if (!row) {
+            return reject(
+              new NotFoundException(`Pose with id ${id} not found`),
+            );
+          }
+
+          resolve(row as Poses);
+        },
+      );
+    });
   }
 
   // CREATE A NEW POSE
@@ -83,44 +96,82 @@ export class PosesService {
       image: poseDto.image,
       description,
     };
-    this.posesDDBB.push(newPose);
-    return newPose;
+
+    return new Promise((resolve, reject) => {
+      this.database.run(
+        `INSERT INTO poses (id, name, description, image) VALUES (?, ?, ?, ?)`,
+        [newPose.id, newPose.name, newPose.description, newPose.image],
+        (err) => {
+          if (err) {
+            console.error('Error inserting pose:', err);
+            return reject(err);
+          }
+          resolve(newPose);
+        },
+      );
+    });
   }
 
   //DELETE A POSE BY ID
-  delete(id: string): void {
-    console.log('Deleting pose with id:', id);
-    this.posesDDBB = this.posesDDBB.filter((pose) => pose.id !== id);
+  async delete(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.database.run(`DELETE FROM poses WHERE id = ?`, [id], function (err) {
+        if (err) {
+          return reject(
+            new NotFoundException(`Error deleting pose with id ${id}`),
+          );
+        }
+        if (this.changes === 0) {
+          return reject(new NotFoundException(`Pose with id ${id} not found`));
+        }
+        resolve();
+      });
+    });
   }
 
   // UPDATE A POSE BY ID
-  update(id: string, poseDto: updatePoseDto): void {
-    const i = this.posesDDBB.findIndex((p) => p.id === id);
+  async update(id: string, poseDto: updatePoseDto): Promise<void> {
+    const { name, description, image } = poseDto;
 
-    if (i === -1) {
-      throw new NotFoundException(`Pose with id ${id} not found`);
-    }
-
-    this.posesDDBB[i] = {
-      ...this.posesDDBB[i],
-      ...poseDto,
-    };
+    return new Promise((resolve, reject) => {
+      this.database.run(
+        `UPDATE poses SET name = ?, description = ?, image = ? WHERE id = ?`,
+        [name, description, image, id],
+        function (err) {
+          if (err) {
+            return reject(err);
+          }
+          if (this.changes === 0) {
+            return reject(
+              new NotFoundException(`Pose with id ${id} not found`),
+            );
+          }
+          resolve();
+        },
+      );
+    });
   }
 
   // SEARCH POSES BY NAME
-  searchByName(name: string): Poses[] {
-    if (!name) return [];
+  searchByName(name: string): Promise<Poses[]> {
+    const normalizedName = name
+      .trim()
+      .replace(/[-\s]+/g, ' ')
+      .toLowerCase();
 
-    const normalize = (text: string) =>
-      text
-        .trim()
-        .replace(/[-\s]+/g, ' ')
-        .toLowerCase();
+    return new Promise((resolve, reject) => {
+      this.database.all(`SELECT * FROM poses`, [], (err, rows) => {
+        if (err) return reject(err);
 
-    const normalizedName = normalize(name);
-
-    return this.posesDDBB.filter(
-      (pose) => normalize(pose.name) === normalizedName,
-    );
+        const results = (rows as Poses[]).filter(
+          (pose) =>
+            pose.name
+              .trim()
+              .replace(/[-\s]+/g, ' ')
+              .toLowerCase() === normalizedName,
+        );
+        resolve(results);
+      });
+    });
   }
 }
