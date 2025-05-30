@@ -86,9 +86,13 @@ export class PosesService {
 
   // CREATE A NEW POSE
   async addPose(poseDto: createPoseDto): Promise<Poses> {
-    const description = poseDto.description.trim()
-      ? poseDto.description
-      : await this.description.createDescription(poseDto);
+    const description =
+      // if poseDto.description exists,  we check if it contains non-whitespace characters using trim().
+      // If the condition is met, we return the existing description.
+      // Otherwise, we generate one dynamically using createDescription(poseDto) with OpenAI assistance.
+      poseDto.description && poseDto.description.trim()
+        ? poseDto.description
+        : await this.description.createDescription(poseDto);
 
     const newPose: Poses = {
       id: uuidv4(),
