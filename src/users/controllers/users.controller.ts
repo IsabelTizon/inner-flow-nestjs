@@ -33,12 +33,12 @@ export class UsersController {
 
   //
   @Post(':id/sequences')
-  createSequence(
+  async createSequence(
     @Param('id', ParseUUIDPipe) userId: string,
     @Body(new ValidationPipe()) sequenceDto: CreateSequenceDto,
-  ): Sequence {
+  ): Promise<Sequence> {
     sequenceDto.userId = userId;
-    return this.usersService.createSequence(sequenceDto);
+    return await this.usersService.createSequence(sequenceDto);
   }
 
   // url path: /users/123/sequences
@@ -65,11 +65,11 @@ export class UsersController {
   }
 
   @Patch(':id/sequences/:sequenceId')
-  updateSequence(
+  async updateSequence(
     @Param('sequenceId', new ParseUUIDPipe()) sequenceId: string,
     @Body(new ValidationPipe())
     updateDto: UpdateSequenceDto,
   ) {
-    this.usersService.updateSequence(sequenceId, updateDto);
+    return await this.usersService.updateSequence(sequenceId, updateDto);
   }
 }

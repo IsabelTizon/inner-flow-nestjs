@@ -42,18 +42,22 @@ export class UsersService {
 
   // CREATE A SEQUENCE
   // sequenceDto.poses is an array of strings ['pose1', 'pose2', 'pose3'].
-  createSequence(sequenceDto: CreateSequenceDto): Sequence {
-    const poses: Poses[] = sequenceDto.poses
-      .map((poseId) => {
+  async createSequence(sequenceDto: CreateSequenceDto): Promise<Sequence> {
+    // Usa Promise.all para esperar a que todas las promesas se resuelvan
+    const results = await Promise.all(
+      sequenceDto.poses.map(async (poseId) => {
         try {
+          const pose = await this.posesService.getOne(poseId);
           console.log(`pose with id ${poseId} found`);
-          return this.posesService.getOne(poseId);
+          return pose;
         } catch {
           console.log(`pose with id ${poseId} NOT found`);
           return undefined;
         }
-      })
-      .filter((p): p is Poses => p !== undefined);
+      }),
+    );
+
+    const poses: Poses[] = results.filter((p): p is Poses => p !== undefined);
 
     const newSequence: Sequence = {
       id: uuidv4(),
@@ -93,10 +97,10 @@ export class UsersService {
   // 💡 UPDATE A SEQUENCE BY ID
   // The void type indicates that the function returns nothing.
   // Receives 2 parameters: id and updateDto
-  updateSequence(
+  async updateSequence(
     id: string,
     updateDto: UpdateSequenceDto,
-  ): Sequence | undefined {
+  ): Promise<Sequence | undefined> {
     //Find the index
     const i = this.sequencesDDBB.findIndex((s) => s.id === id);
     // If there is not a sequence with that id just skip the function
@@ -114,16 +118,20 @@ export class UsersService {
 
     // updateDto.poses is an array of strings ['pose1', 'pose2', 'pose3'].
     if (Array.isArray(updateDto.poses)) {
-      updatedPoses = updateDto.poses
-        .map((poseId) => {
-          try {
-            return this.posesService.getOne(poseId);
-          } catch {
-            return undefined;
-          }
-        })
-        // filter undefined values to ensure that only valid poses are included.
-        .filter((p): p is Poses => p !== undefined);
+      const posePromises = updateDto.poses.map((poseId) => {
+        try {
+          const pose = this.posesService.getOne(poseId);
+          console.log(`pose with id ${poseId} found`);
+          return pose;
+        } catch {
+          console.log(`pose with id ${poseId} NOT found`);
+          return undefined;
+        }
+      });
+      // filter undefined values to ensure that only valid poses are included.
+      const resolvedPoses = await Promise.all(posePromises);
+
+      updatedPoses = resolvedPoses.filter((p): p is Poses => p !== undefined);
     }
 
     // We use the spread operator (...existingSequence) to copy your previous data.
