@@ -1,12 +1,15 @@
-import { IsString, Length, IsOptional } from 'class-validator';
+import { IsString, Length, IsOptional, IsNotEmpty } from 'class-validator';
 export class createPoseDto {
+  @IsNotEmpty()
   @IsString()
   @Length(3, 30)
   readonly name: string;
 
+  @IsNotEmpty()
   @IsString()
   readonly description: string;
 
+  @IsNotEmpty()
   @IsString()
   readonly image: string;
 }
