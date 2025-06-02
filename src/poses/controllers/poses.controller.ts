@@ -8,7 +8,8 @@ import {
   Patch,
   Query,
 } from '@nestjs/common';
-import { PosesService, Poses } from '../services/poses.service';
+import { Poses } from '../models/poses.model';
+import { PosesService } from '../services/poses.service';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 import { NotFoundException } from '@nestjs/common';
