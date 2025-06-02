@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { PosesModule } from './poses/poses.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Poses } from './poses/models/poses.model';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       // username: 'root',
       // password: 'root',
       database: 'yogaDDBB.sqlite',
-      entities: [],
+      entities: [Poses],
       synchronize: true,
     }),
   ],
