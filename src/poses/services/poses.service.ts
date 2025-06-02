@@ -4,17 +4,25 @@ import { NotFoundException } from '@nestjs/common';
 import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
 import { DescriptionService } from './description.service';
 import * as sqlite3 from 'sqlite3';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Poses } from '../models/poses.model';
 
-export interface Poses {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-}
+// export interface Poses {
+//   id: string;
+//   name: string;
+//   description: string;
+//   image: string;
+// }
 
 @Injectable()
 export class PosesService {
-  constructor(private readonly description: DescriptionService) {
+  constructor(
+    private readonly description: DescriptionService,
+    @InjectRepository(Poses)
+    // PosesRepository for interactiion with the database
+    private readonly posesRepository: Repository<Poses>,
+  ) {
     this.database = new sqlite3.Database('yogaDDBB.sqlite', (error) => {
       if (error) {
         console.error('Error opening yoga DDBB:');
@@ -42,6 +50,7 @@ export class PosesService {
 
   private posesDDBB: Poses[] = [];
   private database: sqlite3.Database;
+  private descriptionService: DescriptionService;
 
   // GET ALL THE POSES
   async getAll(): Promise<Poses[]> {
