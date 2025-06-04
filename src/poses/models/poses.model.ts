@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('poses')
 export class Poses {
-  @PrimaryGeneratedColumn({})
+  @PrimaryGeneratedColumn('uuid')
   public readonly id: string;
   @Column()
   public name: string;
