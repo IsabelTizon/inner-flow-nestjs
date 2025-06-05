@@ -37,7 +37,7 @@ export class UsersService {
   }
 
   getUserSequences(userId: string) {
-    return this.sequencesDDBB.filter((sequence) => sequence.userId === userId);
+    return this.sequencesDDBB.filter((sequence) => sequence.user.id === userId);
   }
 
   // CREATE A SEQUENCE
@@ -59,26 +59,28 @@ export class UsersService {
 
     const poses: Poses[] = results.filter((p): p is Poses => p !== undefined);
 
+    const user = this.users.find((u) => u.id === sequenceDto.userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     const newSequence: Sequence = {
       id: uuidv4(),
       name: sequenceDto.name,
       poses,
-      userId: sequenceDto.userId,
+      user,
     };
 
     this.sequencesDDBB.push(newSequence);
 
-    const user = this.users.find((u) => u.id === sequenceDto.userId);
-    if (user) {
-      user.sequences.push(newSequence);
-    }
+    user.sequences.push(newSequence);
 
     return newSequence;
   }
 
   // GET ALL THE USER SEQUENCES
   getSequencesByUserId(userId: string): Sequence[] {
-    return this.sequencesDDBB.filter((sequence) => sequence.userId === userId);
+    return this.sequencesDDBB.filter((sequence) => sequence.user.id === userId);
   }
 
   // GET A SEQUENCE BY ID

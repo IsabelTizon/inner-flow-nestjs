@@ -5,6 +5,8 @@ import { PosesModule } from './poses/poses.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Poses } from './poses/models/poses.model';
+import { User } from './users/models/user.model';
+import { Sequence } from './users/models/sequence.model';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { Poses } from './poses/models/poses.model';
       // username: 'root',
       // password: 'root',
       database: 'yogaDDBB.sqlite',
-      entities: [Poses],
+      entities: [Poses, User, Sequence],
       synchronize: true,
     }),
   ],
