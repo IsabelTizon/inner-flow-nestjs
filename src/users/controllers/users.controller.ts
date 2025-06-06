@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UpdateSequenceDto } from '../dtos/sequence.dto';
-import { CreateUserDto } from '../dtos/createUser.dto';
+import { CreateUserDto } from '../dtos/sign-up.dto';
 import { CreateSequenceDto } from '../dtos/sequence.dto';
 import { User } from '../models/user.model';
 import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
