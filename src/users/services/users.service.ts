@@ -25,7 +25,7 @@ export class UsersService {
     private readonly sequencesRepository: Repository<Sequence>,
   ) {}
 
-  //Create a new user. Receive data from the DTO.
+  //REGISTER NEW USER: Receiving data from the DTO.
   async signUp(signUpDto: SignUpDto): Promise<User> {
     const { name, email, password } = signUpDto;
     const newUser = this.usersRepository.create({
@@ -39,6 +39,7 @@ export class UsersService {
     return newUser;
   }
 
+  //REGISTER NEW USER: Receiving data from the DTO.
   async getUserSequences(userId: string): Promise<Sequence[]> {
     return this.sequencesRepository.find({
       where: { user: { id: userId } },
@@ -46,6 +47,7 @@ export class UsersService {
     });
   }
 
+  //CREATE A NEW SEQUENCE: Receiving data from the DTO.
   async createSequence(sequenceDto: CreateSequenceDto): Promise<Sequence> {
     const poses = await Promise.all(
       sequenceDto.poses.map(async (poseId) => {
@@ -76,10 +78,12 @@ export class UsersService {
     return newSequence;
   }
 
+  // GET A  SEQUENCE BY USER ID
   async getSequencesByUserId(userId: string): Promise<Sequence[]> {
     return this.getUserSequences(userId);
   }
 
+  //GET A SEQUENCE BY ID
   async getOneSequence(id: string): Promise<Sequence | null> {
     return this.sequencesRepository.findOne({
       where: { id },
@@ -87,10 +91,12 @@ export class UsersService {
     });
   }
 
+  //DELETE A SEQUENCE BY ID.
   async deleteSequence(id: string): Promise<void> {
     await this.sequencesRepository.delete(id);
   }
 
+  //UPDATE A SEQUENCE BY ID
   async updateSequence(
     id: string,
     updateDto: UpdateSequenceDto,
