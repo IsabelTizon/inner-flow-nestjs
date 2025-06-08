@@ -1,5 +1,5 @@
 // TypeORM
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 // DTOs
@@ -27,6 +27,16 @@ export class UsersService {
 
   //REGISTER NEW USER: Receiving data from the DTO.
   async signUp(signUpDto: SignUpDto): Promise<User> {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: signUpDto.email },
+    });
+
+    if (existingUser) {
+      console.log('User already exists:', existingUser);
+      throw new BadRequestException(
+        `User with the ${signUpDto.email} already exists`,
+      );
+    }
     const { name, email, password } = signUpDto;
     const newUser = this.usersRepository.create({
       name,
