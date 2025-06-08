@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UpdateSequenceDto } from '../dtos/sequence.dto';
-import { CreateUserDto } from '../dtos/sign-up.dto';
+import { SignUpDto } from '../dtos/sign-up.dto';
 import { CreateSequenceDto } from '../dtos/sequence.dto';
 import { User } from '../models/user.model';
 import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
@@ -26,9 +26,9 @@ export class UsersController {
   //@Body() extracts the body of the HTTP request (e.g., registration data)
   //createUserDto is the object containing the validated data for the new user.
   // @Body() extracts the body of the HTTP request (e.g., registration data).
-  createUser(@Body() createUserDto: CreateUserDto): User {
+  async SignUp(@Body() signUpDto: SignUpDto): Promise<User> {
     //Calls the usersService service to create the user and returns the result.
-    return this.usersService.createUser(createUserDto);
+    return await this.usersService.signUp(signUpDto);
   }
 
   //
@@ -52,16 +52,18 @@ export class UsersController {
   }
 
   @Get(':id/sequences/:sequenceId')
-  getOneSequence(
+  async getOneSequence(
     @Param('sequenceId', ParseUUIDPipe) sequenceId: string,
-  ): Sequence | undefined {
-    return this.usersService.getOneSequence(sequenceId);
+  ): Promise<Sequence | null> {
+    return await this.usersService.getOneSequence(sequenceId);
   }
 
   @Delete(':id/sequences/:sequenceId')
   // ParseUUIDPipe: Automatically validate that the value received as a parameter is a valid UUID.
-  deleteSequence(@Param('sequenceId', ParseUUIDPipe) sequenceId: string): void {
-    this.usersService.deleteSequence(sequenceId);
+  async deleteSequence(
+    @Param('sequenceId', ParseUUIDPipe) sequenceId: string,
+  ): Promise<void> {
+    await this.usersService.deleteSequence(sequenceId);
   }
 
   @Patch(':id/sequences/:sequenceId')
