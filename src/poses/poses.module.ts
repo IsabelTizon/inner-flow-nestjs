@@ -9,7 +9,7 @@ import { Poses } from './models/poses.model';
 @Module({
   controllers: [PosesController],
   providers: [PosesService, DescriptionService, AIService],
-  exports: [PosesService],
+  exports: [PosesService, DescriptionService],
   imports: [TypeOrmModule.forFeature([Poses])],
 })
 export class PosesModule {}
