@@ -37,11 +37,11 @@ export class UsersService {
         `User with the ${signUpDto.email} already exists`,
       );
     }
-    const { name, email, password } = signUpDto;
+    const { name, email, passwordHash } = signUpDto;
     const newUser = this.usersRepository.create({
       name,
       email,
-      password,
+      passwordHash,
       sequences: [],
     });
     await this.usersRepository.save(newUser);
