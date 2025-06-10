@@ -1,3 +1,4 @@
+// METHODS IMPORTED
 import {
   Body,
   Controller,
@@ -7,13 +8,21 @@ import {
   Delete,
   Patch,
 } from '@nestjs/common';
+
+// SERVICES
 import { UsersService } from '../services/users.service';
+
+//DTOs
 import { UpdateSequenceDto } from '../dtos/sequence.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { CreateSequenceDto } from '../dtos/sequence.dto';
+
+// MODELS
 import { User } from '../models/user.model';
-import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
 import { Sequence } from '../models/sequence.model';
+
+// VALIDATION PIPES
+import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
 
 // url path: /users
 @Controller('users')
@@ -31,7 +40,13 @@ export class UsersController {
     return await this.usersService.signUp(signUpDto);
   }
 
-  //
+  // SIGN IN
+  @Post('login')
+  async SignIn(@Body() signInDto: SignUpDto): Promise<User> {
+    return await this.usersService.signIn(signInDto);
+  }
+
+  // CREATE A SEQUENCE
   @Post(':id/sequences')
   async createSequence(
     @Param('id', ParseUUIDPipe) userId: string,
@@ -41,7 +56,7 @@ export class UsersController {
     return await this.usersService.createSequence(sequenceDto);
   }
 
-  // url path: /users/123/sequences
+  // GET ALL USER SEQUENCES
   @Get(':id/sequences')
   //@Param('id') userId: Take the URL parameter called id and store it in the userId variable
   // @Param('id'): Extracts the ID from the URL.
@@ -51,6 +66,7 @@ export class UsersController {
     return this.usersService.getUserSequences(userId);
   }
 
+  // GET A SEQUENCE BY USER ID
   @Get(':id/sequences/:sequenceId')
   async getOneSequence(
     @Param('sequenceId', ParseUUIDPipe) sequenceId: string,
@@ -58,6 +74,7 @@ export class UsersController {
     return await this.usersService.getOneSequence(sequenceId);
   }
 
+  // DELETE A SEQUENCE BY ID
   @Delete(':id/sequences/:sequenceId')
   // ParseUUIDPipe: Automatically validate that the value received as a parameter is a valid UUID.
   async deleteSequence(
@@ -66,6 +83,7 @@ export class UsersController {
     await this.usersService.deleteSequence(sequenceId);
   }
 
+  // UODATE A SEQUENCE BY ID
   @Patch(':id/sequences/:sequenceId')
   async updateSequence(
     @Param('sequenceId', new ParseUUIDPipe()) sequenceId: string,
