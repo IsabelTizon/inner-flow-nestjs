@@ -24,6 +24,9 @@ import { Sequence } from '../models/sequence.model';
 // VALIDATION PIPES
 import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
 
+// INTERFACES
+import { AuthResponse } from '../interfaces/auth-response.interface';
+
 // url path: /users
 @Controller('users')
 export class UsersController {
@@ -42,7 +45,7 @@ export class UsersController {
 
   // SIGN IN
   @Post('login')
-  async SignIn(@Body() signInDto: SignUpDto): Promise<User> {
+  async SignIn(@Body() signInDto: SignUpDto): Promise<AuthResponse> {
     return await this.usersService.signIn(signInDto);
   }
 

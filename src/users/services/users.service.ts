@@ -2,10 +2,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 // DTOs
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { SignInDto } from '../dtos/sign-in.dto';
 import { CreateSequenceDto, UpdateSequenceDto } from '../dtos/sequence.dto';
+
 // Models
 import { Poses } from 'src/poses/models/poses.model';
 import { Sequence } from '../models/sequence.model';
@@ -17,6 +19,12 @@ import { PosesService } from '../../poses/services/poses.service';
 // bcrypt
 import { hash, compare } from 'bcrypt';
 
+// JWT
+import { JwtService } from '@nestjs/jwt';
+
+// INTERFACES
+import { AuthResponse } from '../interfaces/auth-response.interface';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -27,6 +35,9 @@ export class UsersService {
 
     @InjectRepository(Sequence)
     private readonly sequencesRepository: Repository<Sequence>,
+
+    @InjectRepository(User)
+    private readonly jwtService: JwtService,
   ) {}
 
   //REGISTER NEW USER: Receiving data from the DTO.
@@ -68,7 +79,8 @@ export class UsersService {
     }
   }
 
-  async signIn(signInDto: SignInDto): Promise<User> {
+  // SIGN IN
+  async signIn(signInDto: SignInDto): Promise<AuthResponse> {
     const existingUser = await this.usersRepository.findOne({
       where: { email: signInDto.email },
     });
@@ -91,7 +103,8 @@ export class UsersService {
         throw new BadRequestException('Invalid password');
       }
       console.log('User signed in successfully:', existingUser);
-      return existingUser;
+      const token = this.jwtService.sign({ id: existingUser.id });
+      return { token };
     } catch (error) {
       if (error instanceof Error) {
         throw new BadRequestException(
@@ -102,7 +115,7 @@ export class UsersService {
     }
   }
 
-  //REGISTER NEW USER: Receiving data from the DTO.
+  // GET ALL USER's SEQUENCES
   async getUserSequences(userId: string): Promise<Sequence[]> {
     return this.sequencesRepository.find({
       where: { user: { id: userId } },
