@@ -14,7 +14,7 @@ import { User } from '../models/user.model';
 import { PosesService } from '../../poses/services/poses.service';
 
 // bcrypt
-import * as bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -43,20 +43,28 @@ export class UsersService {
 
     const { name, email, password } = signUpDto;
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    console.log(await bcrypt.hash('test', 10));
+    try {
+      const passwordHash = await hash(password, 10);
 
-    const newUser = this.usersRepository.create({
-      name,
-      email,
-      passwordHash,
-      sequences: [],
-    });
+      const newUser = this.usersRepository.create({
+        name,
+        email,
+        passwordHash,
+        sequences: [],
+      });
 
-    await this.usersRepository.save(newUser);
-    console.log('New user registered:', newUser);
+      await this.usersRepository.save(newUser);
+      console.log('New user registered:', newUser);
 
-    return newUser;
+      return newUser;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new BadRequestException(
+          `Error hashing password: ${error.message}`,
+        );
+      }
+      throw new BadRequestException('Error hashing password');
+    }
   }
 
   //REGISTER NEW USER: Receiving data from the DTO.
