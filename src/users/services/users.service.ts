@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 // DTOs
 import { SignUpDto } from '../dtos/sign-up.dto';
+import { SignInDto } from '../dtos/sign-in.dto';
 import { CreateSequenceDto, UpdateSequenceDto } from '../dtos/sequence.dto';
 // Models
 import { Poses } from 'src/poses/models/poses.model';
@@ -14,7 +15,7 @@ import { User } from '../models/user.model';
 import { PosesService } from '../../poses/services/poses.service';
 
 // bcrypt
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -64,6 +65,40 @@ export class UsersService {
         );
       }
       throw new BadRequestException('Error hashing password');
+    }
+  }
+
+  async signIn(signInDto: SignInDto): Promise<User> {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: signInDto.email },
+    });
+
+    if (!existingUser) {
+      console.log('User not found:', signInDto.email);
+      throw new BadRequestException(
+        `User with email ${signInDto.email} not found`,
+      );
+    }
+
+    try {
+      const matches = await compare(
+        signInDto.password,
+        existingUser.passwordHash,
+      );
+
+      if (!matches) {
+        console.log('Password mismatch for user:', signInDto.email);
+        throw new BadRequestException('Invalid password');
+      }
+      console.log('User signed in successfully:', existingUser);
+      return existingUser;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new BadRequestException(
+          `Error comparing passwords: ${error.message}`,
+        );
+      }
+      throw new BadRequestException('Error comparing passwords');
     }
   }
 
