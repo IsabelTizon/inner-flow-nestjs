@@ -13,6 +13,9 @@ import { User } from '../models/user.model';
 // Services
 import { PosesService } from '../../poses/services/poses.service';
 
+// bcrypt
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -37,15 +40,22 @@ export class UsersService {
         `User with the ${signUpDto.email} already exists`,
       );
     }
-    const { name, email, passwordHash } = signUpDto;
+
+    const { name, email, password } = signUpDto;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log(await bcrypt.hash('test', 10));
+
     const newUser = this.usersRepository.create({
       name,
       email,
       passwordHash,
       sequences: [],
     });
+
     await this.usersRepository.save(newUser);
     console.log('New user registered:', newUser);
+
     return newUser;
   }
 
@@ -88,7 +98,7 @@ export class UsersService {
     return newSequence;
   }
 
-  // GET A  SEQUENCE BY USER ID
+  // GET A SEQUENCE BY USER ID
   async getSequencesByUserId(userId: string): Promise<Sequence[]> {
     return this.getUserSequences(userId);
   }

@@ -24,5 +24,5 @@ export class SignUpDto {
     minNumbers: 1,
     minSymbols: 1,
   })
-  passwordHash: string;
+  password: string;
 }
