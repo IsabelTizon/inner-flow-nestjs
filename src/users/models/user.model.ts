@@ -14,7 +14,7 @@ export class User {
   email: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
   @OneToMany(() => Sequence, (sequence) => sequence.user)
   sequences: Sequence[];

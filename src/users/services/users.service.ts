@@ -55,12 +55,16 @@ export class UsersService {
     const { name, email, password } = signUpDto;
 
     try {
+      console.log('DTO received:', signUpDto);
+      console.log('Password received:', password);
+
       const passwordHash = await hash(password, 10);
+      console.log('Password hash generated:', passwordHash);
 
       const newUser = this.usersRepository.create({
         name,
         email,
-        passwordHash,
+        password: passwordHash,
         sequences: [],
       });
 
@@ -93,12 +97,9 @@ export class UsersService {
 
     try {
       console.log('Password plain:', signInDto.password);
-      console.log('Password hash:', existingUser.passwordHash);
+      console.log('Password hash:', existingUser.password);
 
-      const matches = await compare(
-        signInDto.password,
-        existingUser.passwordHash,
-      );
+      const matches = await compare(signInDto.password, existingUser.password);
 
       if (!matches) {
         console.log('Password mismatch for user:', signInDto.email);
