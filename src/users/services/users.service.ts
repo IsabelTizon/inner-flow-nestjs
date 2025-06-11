@@ -36,7 +36,6 @@ export class UsersService {
     @InjectRepository(Sequence)
     private readonly sequencesRepository: Repository<Sequence>,
 
-    @InjectRepository(User)
     private readonly jwtService: JwtService,
   ) {}
 
@@ -93,6 +92,9 @@ export class UsersService {
     }
 
     try {
+      console.log('Password plain:', signInDto.password);
+      console.log('Password hash:', existingUser.passwordHash);
+
       const matches = await compare(
         signInDto.password,
         existingUser.passwordHash,
