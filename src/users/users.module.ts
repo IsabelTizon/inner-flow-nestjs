@@ -21,6 +21,11 @@ import { JwtModule } from '@nestjs/jwt';
 // ENVIRONMENT VARIABLES
 import 'dotenv/config';
 
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  throw new Error('JWT_SECRET is not defined');
+}
+
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
@@ -28,7 +33,7 @@ import 'dotenv/config';
     PosesModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
+      secret: jwtSecret,
       signOptions: {
         expiresIn: '180seconds', // 3 minutes
       },
