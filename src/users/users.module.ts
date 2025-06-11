@@ -35,7 +35,7 @@ if (!jwtSecret) {
       global: true,
       secret: jwtSecret,
       signOptions: {
-        expiresIn: '180seconds', // 3 minutes
+        expiresIn: '600seconds', // 10 minutes
       },
     }),
     TypeOrmModule.forFeature([Poses, User, Sequence]),
