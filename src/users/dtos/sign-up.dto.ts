@@ -15,6 +15,7 @@ export class SignUpDto {
   name: string;
 
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsStrongPassword({

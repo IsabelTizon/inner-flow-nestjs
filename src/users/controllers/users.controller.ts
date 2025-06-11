@@ -15,6 +15,7 @@ import { UsersService } from '../services/users.service';
 //DTOs
 import { UpdateSequenceDto } from '../dtos/sequence.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
+import { SignInDto } from '../dtos/sign-in.dto';
 import { CreateSequenceDto } from '../dtos/sequence.dto';
 
 // MODELS
@@ -45,7 +46,7 @@ export class UsersController {
 
   // SIGN IN
   @Post('login')
-  async SignIn(@Body() signInDto: SignUpDto): Promise<AuthResponse> {
+  async SignIn(@Body() signInDto: SignInDto): Promise<AuthResponse> {
     return await this.usersService.signIn(signInDto);
   }
 
