@@ -1,5 +1,10 @@
-import { Sequence } from 'src/users/models/sequence.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Sequence } from './sequence.model';
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
 
 @Entity('users')
 export class User {
@@ -14,7 +19,14 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
+  passwordHash: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @OneToMany(() => Sequence, (sequence) => sequence.user)
   sequences: Sequence[];
