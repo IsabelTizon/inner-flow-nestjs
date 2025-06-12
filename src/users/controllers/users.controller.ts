@@ -28,11 +28,25 @@ import { ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
 // INTERFACES
 import { AuthResponse } from '../interfaces/auth-response.interface';
 
+// GUARDS
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../roles/jwt-auth.guard';
+import { RolesGuard } from '../roles/roles-guard';
+import { Roles } from '../roles/roles.decorator';
+import { UserRole } from '../models/user.model';
+
 // url path: /users
 @Controller('users')
 export class UsersController {
   //Injects the UsersService service to apply dependency injection.
   constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get('admin-only')
+  getAdminData() {
+    return 'Just for admins!';
+  }
 
   // url path: //users/register
   @Post('register')
