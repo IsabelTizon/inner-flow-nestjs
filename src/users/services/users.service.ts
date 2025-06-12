@@ -46,31 +46,24 @@ export class UsersService {
     });
 
     if (existingUser) {
-      console.log('User already exists:', existingUser);
       throw new BadRequestException(
-        `User with the ${signUpDto.email} already exists`,
+        `User with email ${signUpDto.email} already exists`,
       );
     }
 
     const { name, email, password } = signUpDto;
 
     try {
-      console.log('DTO received:', signUpDto);
-      console.log('Password received:', password);
-
       const passwordHash = await hash(password, 10);
-      console.log('Password hash generated:', passwordHash);
 
       const newUser = this.usersRepository.create({
         name,
         email,
-        password: passwordHash,
+        passwordHash,
         sequences: [],
       });
 
       await this.usersRepository.save(newUser);
-      console.log('New user registered:', newUser);
-
       return newUser;
     } catch (error) {
       if (error instanceof Error) {
@@ -89,25 +82,30 @@ export class UsersService {
     });
 
     if (!existingUser) {
-      console.log('User not found:', signInDto.email);
       throw new BadRequestException(
         `User with email ${signInDto.email} not found`,
       );
     }
 
     try {
-      console.log('Password plain:', signInDto.password);
-      console.log('Password hash:', existingUser.password);
-
-      const matches = await compare(signInDto.password, existingUser.password);
+      const matches = await compare(
+        signInDto.password,
+        existingUser.passwordHash,
+      );
 
       if (!matches) {
-        console.log('Password mismatch for user:', signInDto.email);
         throw new BadRequestException('Invalid password');
       }
-      console.log('User signed in successfully:', existingUser);
-      const token = this.jwtService.sign({ id: existingUser.id });
-      return { token };
+
+      const token = await this.jwtService.signAsync({
+        id: existingUser.id,
+        role: existingUser.role,
+      });
+
+      return {
+        user: existingUser,
+        token,
+      };
     } catch (error) {
       if (error instanceof Error) {
         throw new BadRequestException(
