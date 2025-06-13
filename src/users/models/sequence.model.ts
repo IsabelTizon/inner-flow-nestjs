@@ -7,9 +7,11 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  Unique,
 } from 'typeorm';
 
 @Entity('sequences')
+@Unique(['name', 'user']) // prevents the same user from having 2 sequences with the same name
 export class Sequence {
   @PrimaryGeneratedColumn('uuid')
   id: string;
