@@ -18,10 +18,11 @@ export class Sequence {
   name: string;
 
   //{ onDelete: 'CASCADE' }:  If the user is deleted, all sequences associated with him are also automatically deleted.
+  // many sequences for one user
   @ManyToOne(() => User, (user) => user.sequences, { onDelete: 'CASCADE' })
   user: User;
 
   @ManyToMany(() => Poses)
-  @JoinTable()
+  @JoinTable({ name: 'sequence_poses' })
   poses: Poses[];
 }
