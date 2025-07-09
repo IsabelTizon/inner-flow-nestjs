@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   // url path: //users/register
-  @Post('register')
+  @Post('auth/register')
   //@Body() extracts the body of the HTTP request (e.g., registration data)
   //createUserDto is the object containing the validated data for the new user.
   // @Body() extracts the body of the HTTP request (e.g., registration data).
@@ -59,7 +59,7 @@ export class UsersController {
   }
 
   // SIGN IN
-  @Post('login')
+  @Post('auth/login')
   async SignIn(@Body() signInDto: SignInDto): Promise<AuthResponse> {
     return await this.usersService.signIn(signInDto);
   }
