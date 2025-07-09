@@ -35,6 +35,10 @@ import { RolesGuard } from '../roles/roles-guard';
 import { Roles } from '../roles/roles.decorator';
 import { UserRole } from '../models/user.model';
 
+// Validatin Login
+import { Request } from 'express';
+import { Req } from '@nestjs/common';
+
 // url path: /users
 @Controller('users')
 export class UsersController {
@@ -60,7 +64,12 @@ export class UsersController {
 
   // SIGN IN
   @Post('auth/login')
-  async SignIn(@Body() signInDto: SignInDto): Promise<AuthResponse> {
+  async signIn(
+    @Req() req: Request,
+    @Body() signInDto: SignInDto,
+  ): Promise<AuthResponse> {
+    console.log('Body:', req.body); // Here you see it raw
+    console.log('DTO validator:', signInDto); // Here you see it already processed by the ValidationPipe
     return await this.usersService.signIn(signInDto);
   }
 
