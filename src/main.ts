@@ -11,7 +11,7 @@ async function bootstrap() {
   // The join function is used to join file paths securely and is compatible with any operating system (Windows, Mac, Linux).
   //app.useStaticAssets(...) tells NestJS that everything you put in the /public folder will be available via URL.
   // So, if you put an image in /public/img/poses/cat-pose.jpg, your frontend can access it at http://localhost:3000/img/poses/cat-pose.jpg.
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets('/Users/Isa/Github/inner-flow-nestjs/public');
   // CORS: CORS added to allows frontend to request resources from different domain securely
   app.enableCors({
     origin: 'http://localhost:5173',
