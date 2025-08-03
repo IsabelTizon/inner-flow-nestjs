@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { createPoseDto } from '../dtos/pose.dto';
-import { AIService } from './ai.service';
+import { Injectable } from '@nestjs/common'; // it is a decorator used to mark a class as a provider, in this case, for the AI service to interact with OpenAI API
+import { AIService } from './ai.service'; //
+import { createPoseDto } from '../dtos/pose.dto'; // dto for creating poses descriptions
 
 @Injectable()
 export class DescriptionService {
