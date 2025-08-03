@@ -1,12 +1,22 @@
-import { Injectable } from '@nestjs/common';
+//  INJECTABLE
+import { Injectable } from '@nestjs/common'; // it is a decorator used to mark a class as a provider, allowing it to be injected into controllers.
+
+// ERRORS
 import { NotFoundException } from '@nestjs/common';
-import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
-import { DescriptionService } from './description.service';
-import * as sqlite3 from 'sqlite3';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Poses } from '../models/poses.model';
 import { BadRequestException } from '@nestjs/common';
+
+// DTOS
+import { createPoseDto, updatePoseDto } from '../dtos/pose.dto'; // classes for data transfer objects for creating and updating poses
+
+// OpenAI
+import { DescriptionService } from './description.service'; // OpenAI service to interact with the OpenAI API for generating pose descriptions
+
+// DDBB: MODELS
+import { Poses } from '../models/poses.model'; // structure of the poses table in the DDBB
+/// DDBB: SQLITE3
+import * as sqlite3 from 'sqlite3'; // SQLite3 library for interacting with the SQLite database
+import { Repository } from 'typeorm'; // TYPEORM
+import { InjectRepository } from '@nestjs/typeorm';
 
 // export interface Poses {
 //   id: string;
@@ -50,7 +60,7 @@ export class PosesService {
 
   // private posesDDBB: Poses[] = [];
   private database: sqlite3.Database;
-  private descriptionService: DescriptionService;
+  // private descriptionService: DescriptionService;
 
   // GET ALL THE POSES
   async getAll(): Promise<Poses[]> {

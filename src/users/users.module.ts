@@ -17,6 +17,8 @@ import { UsersController } from './controllers/users.controller';
 
 // JWT
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './roles/jwt.strategy';
 
 // ENVIRONMENT VARIABLES
 import 'dotenv/config';
@@ -28,9 +30,10 @@ if (!jwtSecret) {
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, JwtStrategy],
   imports: [
     PosesModule,
+    PassportModule,
     JwtModule.register({
       global: true,
       secret: jwtSecret,

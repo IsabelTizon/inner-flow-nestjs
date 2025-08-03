@@ -1,4 +1,5 @@
 import { IsString, Length, IsOptional, IsNotEmpty } from 'class-validator';
+//
 export class createPoseDto {
   @IsNotEmpty()
   @IsString()
