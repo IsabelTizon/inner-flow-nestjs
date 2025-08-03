@@ -1,3 +1,9 @@
+// POSES CONTROLLER: Handles HTTP requests related to poses
+
+// SERVICES
+import { PosesService } from '../services/poses.service'; // Provides methods to interact with the database for poses
+
+// DECORATORS
 import {
   Controller,
   Get,
@@ -8,16 +14,25 @@ import {
   Patch,
   Query,
   UseGuards,
-} from '@nestjs/common';
-import { Poses } from '../models/poses.model';
-import { PosesService } from '../services/poses.service';
-import { ParseUUIDPipe } from '@nestjs/common';
-import { createPoseDto, updatePoseDto } from '../dtos/pose.dto';
-import { NotFoundException } from '@nestjs/common';
-import { JwtAuthGuard } from '../../users/roles/jwt-auth.guard';
-import { RolesGuard } from '../../users/roles/roles-guard'; // <-- Añade esto (ajusta la ruta si es necesario)
-import { Roles } from '../../users/roles/roles.decorator'; // <-- Añade esto (ajusta la ruta si es necesario)
-import { UserRole } from '../../users/models/user.model';
+} from '@nestjs/common'; // methods to handle HTTP requests for poses
+
+// MODELS
+import { Poses } from '../models/poses.model'; // entity for defining the structure of the table in the database
+
+// DTOS
+import { createPoseDto, updatePoseDto } from '../dtos/pose.dto'; // classes for data transfer objects for creating and updating poses
+
+// UUIDs
+import { ParseUUIDPipe } from '@nestjs/common'; // Validating  UUIDs
+
+// NOT FOUND EXCEPTION
+import { NotFoundException } from '@nestjs/common'; // notfoundexception to handle cases where a pose is not found
+
+// AUTHENTICATION AND AUTHORIZATION
+import { JwtAuthGuard } from '../../users/roles/jwt-auth.guard'; // jwt-auth-guard to protect routes that require authentication
+import { RolesGuard } from '../../users/roles/roles-guard'; // roles-guard to restrict access based on user roles
+import { Roles } from '../../users/roles/roles.decorator'; // roles decorator to specify required roles for accessing certain routes
+import { UserRole } from '../../users/models/user.model'; // user role enum to define different user roles in the application
 
 @Controller('poses')
 export class PosesController {
@@ -44,14 +59,13 @@ export class PosesController {
   }
 
   // Get one pose by ID
-  @Get(':id')
+  @Get(':id') // endpoint to get a pose by its ID
   async getOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<Poses> {
     return await this.posesService.getOne(id);
   }
 
   // Create a new pose
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Post()
   async addPose(@Body() pose: createPoseDto): Promise<Poses> {
     return await this.posesService.addPose(pose);
