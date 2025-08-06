@@ -26,7 +26,7 @@ import { createPoseDto, updatePoseDto } from '../dtos/pose.dto'; // classes for 
 import { ParseUUIDPipe } from '@nestjs/common'; // Validating  UUIDs
 
 // NOT FOUND EXCEPTION
-import { NotFoundException } from '@nestjs/common'; // notfoundexception to handle cases where a pose is not found
+// import { NotFoundException } from '@nestjs/common'; // notfoundexception to handle cases where a pose is not found
 
 // AUTHENTICATION AND AUTHORIZATION
 import { JwtAuthGuard } from '../../users/roles/jwt-auth.guard'; // jwt-auth-guard to protect routes that require authentication
@@ -44,7 +44,9 @@ export class PosesController {
     const results = await this.posesService.searchByName(name);
 
     if (results.length === 0) {
-      throw new NotFoundException(`No pose found with the name "${name}"`);
+      if (!name || name.trim() === '') {
+        return [];
+      }
     }
 
     return results;
