@@ -222,12 +222,12 @@ export class PosesService {
       this.database.all(`SELECT * FROM poses`, [], (err, rows) => {
         if (err) return reject(err);
 
-        const results = (rows as Poses[]).filter(
-          (pose) =>
-            pose.name
-              .trim()
-              .replace(/[-\s]+/g, ' ')
-              .toLowerCase() === normalizedName,
+        const results = (rows as Poses[]).filter((pose) =>
+          pose.name
+            .trim()
+            .replace(/[-\s]+/g, ' ')
+            .toLowerCase()
+            .includes(normalizedName),
         );
         resolve(results);
       });
