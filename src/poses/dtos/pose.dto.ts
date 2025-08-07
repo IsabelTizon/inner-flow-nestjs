@@ -3,7 +3,7 @@ import { IsString, Length, IsOptional, IsNotEmpty } from 'class-validator';
 export class createPoseDto {
   @IsNotEmpty()
   @IsString()
-  @Length(3, 30)
+  @Length(3, 100)
   readonly name: string;
 
   @IsOptional()
@@ -18,7 +18,7 @@ export class createPoseDto {
 export class updatePoseDto {
   @IsOptional()
   @IsString()
-  @Length(3, 30)
+  @Length(3, 100)
   readonly name?: string;
 
   @IsOptional()
