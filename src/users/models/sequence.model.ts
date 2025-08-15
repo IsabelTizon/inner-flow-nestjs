@@ -19,6 +19,9 @@ export class Sequence {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  description?: string;
+
   //{ onDelete: 'CASCADE' }:  If the user is deleted, all sequences associated with him are also automatically deleted.
   // many sequences for one user
   @ManyToOne(() => User, (user) => user.sequences, { onDelete: 'CASCADE' })
