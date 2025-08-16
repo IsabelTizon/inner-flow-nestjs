@@ -1,19 +1,20 @@
-// TypeORM
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-//MODULES
+// MODULES
 import { Module } from '@nestjs/common';
 import { PosesModule } from '../poses/poses.module';
+
+// SERVICES
+import { UsersService } from './services/users.service';
+
+// CONTROLLERS
+import { UsersController } from './controllers/users.controller';
+
+// TypeORM
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 // MODELS
 import { Poses } from '../poses/models/poses.model';
 import { User } from './models/user.model';
 import { Sequence } from './models/sequence.model';
-
-//SERVICES
-import { UsersService } from './services/users.service';
-//CONTROLLERS
-import { UsersController } from './controllers/users.controller';
 
 // JWT
 import { JwtModule } from '@nestjs/jwt';

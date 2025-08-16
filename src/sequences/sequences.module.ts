@@ -1,14 +1,14 @@
 // MODULE + SERVICE + CONTROLLER
 import { Module } from '@nestjs/common';
 
-// DDBB + ORM
-import { TypeOrmModule } from '@nestjs/typeorm';
-
 // CONTROLLER
 import { SequencesController } from './sequences.controller';
 
 // SERVICES
 import { SequencesService } from './sequences.service';
+
+// DDBB + ORM
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 // MODELS
 import { Sequence } from '../users/models/sequence.model';

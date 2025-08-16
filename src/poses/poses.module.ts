@@ -1,16 +1,20 @@
-// MODULE + SERVICE + CONTROLLER
+// MODULEs
 import { Module } from '@nestjs/common';
+
+// SERVICES
 import { PosesService } from './services/poses.service';
+
+// CONTROLLERS
 import { PosesController } from './controllers/poses.controller';
+
 // AI
-// OpenAI service to interact with the OpenAI API for generating pose descriptions
 import { DescriptionService } from './services/description.service';
 import { AIService } from './services/ai.service';
 
-// DDBB + ORM
+// ORM
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// MODEL (ENTITIES) database table structure
+// MODELS
 import { Poses } from './models/poses.model';
 
 @Module({
