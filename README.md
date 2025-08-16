@@ -136,6 +136,19 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - `POST /sequences/:id/poses` - Add pose to sequence
 - `DELETE /sequences/:id/poses/:poseId` - Remove pose from sequence
 
+### DDBB Tables
+
+1. Main DDBB Tables :
+
+   - POSES: id - name - description - image
+   - USERS: id - email - password - role
+   - SEQUENCES: id - name - description - userId
+
+2. JOIN TABLE: (sequence_poses) It is a junction table for handling many-to-many relationships: A sequence can have many poses and A pose can be in many sequences
+
+- sequenceId (FK → sequences.id)
+- poseId (FK → poses.id)
+
 🚀 📌 ⚙️ ✅
 
 ### STRUCTURE 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
