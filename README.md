@@ -96,3 +96,72 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Features
+
+- 🧘‍♀️ **Yoga Poses Management** - CRUD operations for yoga poses
+- 🤖 **AI Descriptions** - Automatic pose descriptions using OpenAI
+- 👤 **User Authentication** - JWT-based auth with role-based access
+- 📝 **Sequences** - Create and manage custom yoga sequences
+- 🔒 **Secure** - Password hashing and protected routes
+- 📊 **SQLite Database** - Lightweight database with TypeORM
+
+## Tech Stack
+
+- **Framework:** NestJS + TypeScript
+- **Database:** SQLite with TypeORM
+- **Authentication:** JWT + Passport
+- **AI:** OpenAI API
+- **Validation:** class-validator
+
+## API Endpoints
+
+### Authentication
+
+- `POST /users/auth/register` - Register new user
+- `POST /users/auth/login` - Login user
+
+### Poses
+
+- `GET /poses` - Get all poses
+- `GET /poses/:id` - Get pose by ID
+- `POST /poses` - Create new pose (Auth required)
+- `PUT /poses/:id` - Update pose (Admin only)
+- `DELETE /poses/:id` - Delete pose (Admin only)
+
+### Sequences
+
+- `GET /sequences/my-sequences` - Get user sequences
+- `POST /sequences` - Create new sequence
+- `POST /sequences/:id/poses` - Add pose to sequence
+- `DELETE /sequences/:id/poses/:poseId` - Remove pose from sequence
+
+🚀 📌 ⚙️ ✅
+
+### STRUCTURE 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+
+✅ => MODELS: (ENTITIES) database table structure
+✅ => CONTROLLERS: Handle HTTP requests (GET, POST, PUT, DELETE) and route them to services
+✅ => SERVICES: Business logic layer that processes data and interacts with the database
+✅ => MODULES: Organize related controllers, services, and providers into cohesive units
+✅ => DTOs: (Data Transfer Objects) Define and validate the structure of incoming/outgoing data
+✅ => GUARDS: Protect routes with authentication and authorization (JwtAuthGuard, RolesGuard)
+
+### SPACKAGES 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀
+
+📌 Components:
+✅ common => Essential components for creating services, modules, and controllers in NestJS applications
+📌 DDBB:
+✅ typeorm => ORM for managing the SQLite database with entities, repositories, and migrations.
+✅ class-validator => Validates incoming data using decorators (@IsString, @IsOptional, @IsEmail)
+✅ sqlite3 => Lightweight database engine for development and small-scale applications
+✅ uuid => Generate unique identifiers for database records
+📌 AI:
+✅ OpenAI => service to interact with the OpenAI API for generating pose descriptions
+✅ axios => HTTP client for making API requests to external services like OpenAI
+📌 Auth:
+✅ JWT => (JSON Web Tokens) to generate tokens when the user logged in, for validating tokens in authorization, to configure the secret and the expiration time
+✅ JwtStrategy => Defines how to validate JWT tokens, Extracts user information from the token and Runs automatically on protected routes
+✅ PassportModule => Framework for managing different authentication strategies. Simplifies token validation
+✅ dotenv/config => Load variables from the .env file, Allows you to use process.env.JWT_SECRET and Keeps secrets out of the code
+✅ bcrypt => Hash passwords securely before storing them in the database
