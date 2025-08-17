@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { PosesModule } from './poses/poses.module';
 import { UsersModule } from './users/users.module';
 import { SequencesModule } from './sequences/sequences.module';
+import { ContactModule } from './contact/contact.module';
 
 // CONTROLLERS
 import { AppController } from './app.controller';
@@ -23,6 +24,7 @@ import { Sequence } from './users/models/sequence.model';
     PosesModule,
     UsersModule,
     SequencesModule,
+    ContactModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       // host: 'localhost',
