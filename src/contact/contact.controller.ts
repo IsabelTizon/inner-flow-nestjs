@@ -1,14 +1,20 @@
+// NestJS decorators to handle HTTP requests.
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+
+// DTO
 import { ContactDto } from './dtos/contact.dto';
+
+// SERVICE
 import { EmailService } from './services/email.service';
 
-@Controller('contact')
+@Controller('contact') //controller handle requests sent to the /contact route.
 export class ContactController {
   constructor(private readonly emailService: EmailService) {}
 
   @Post()
   @HttpCode(HttpStatus.OK)
   async sendContactMessage(
+    //sendContactMessage: sets the response code to 200 OK if the request succeeds.
     @Body() contactData: ContactDto,
   ): Promise<{ message: string }> {
     try {
