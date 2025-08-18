@@ -155,9 +155,9 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ✅ => MODELS: (ENTITIES) database table structure
 ✅ => CONTROLLERS: Handle HTTP requests (GET, POST, PUT, DELETE) and route them to services
-✅ => SERVICES: Business logic layer that processes data and interacts with the database
+✅ => SERVICES: Business logic layer that processes data and interacts with the database. Injectable is a NestJS decorator that marks a class as a provider
 ✅ => MODULES: Organize related controllers, services, and providers into cohesive units
-✅ => DTOs: (Data Transfer Objects) Define and validate the structure of incoming/outgoing data
+✅ => DTOs: (Data Transfer Objects) Define and validate the structure of incoming/outgoing data. Validan con: ValidationPipe, class-validator y class-transformer
 ✅ => GUARDS: Protect routes with authentication and authorization (JwtAuthGuard, RolesGuard)
 
 ### SPACKAGES 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀
@@ -178,3 +178,9 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 ✅ PassportModule => Framework for managing different authentication strategies. Simplifies token validation
 ✅ dotenv/config => Load variables from the .env file, Allows you to use process.env.JWT_SECRET and Keeps secrets out of the code
 ✅ bcrypt => Hash passwords securely before storing them in the database
+✅ nodemailer =>
+✅ =>
+✅ =>
+✅ =>
+✅ =>
+✅ =>
