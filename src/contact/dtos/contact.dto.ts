@@ -9,6 +9,7 @@ export class ContactDto {
   @IsString()
   surname: string;
 
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
