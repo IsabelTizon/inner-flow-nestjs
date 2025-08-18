@@ -1,15 +1,22 @@
+// INJECTABLE
 import { Injectable } from '@nestjs/common';
+
+// a library for sending emails via SMTP.
 import * as nodemailer from 'nodemailer';
+
+// DTO
 import { ContactDto } from '../dtos/contact.dto';
 
 @Injectable()
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter; // transporter represents the email sender (SMTP client)
 
+  // CONSTRUCTOR initializes the email transporter
   constructor() {
     this.transporter = this.createTransporter();
   }
 
+  // EMAIL TRANSPORTER: This service is a flexible email sender that works with multiple providers (Gmail, Hotmail, SendGrid, custom SMTP) and defaults to Ethereal for local testing.
   private createTransporter(): nodemailer.Transporter {
     const emailService = process.env.EMAIL_SERVICE;
     console.log('Creating email transporter with service:', emailService);
