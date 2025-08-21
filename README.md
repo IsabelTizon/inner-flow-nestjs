@@ -118,8 +118,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ### Authentication
 
-- `POST /users/auth/register` - Register new user
-- `POST /users/auth/login` - Login user
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - Login user
 
 ### Poses
 

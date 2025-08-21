@@ -39,8 +39,8 @@ import { UserRole } from '../models/user.model';
 import { Request } from 'express';
 import { Req } from '@nestjs/common';
 
-// url path: /users
-@Controller('users')
+// url path: /auth
+@Controller('auth')
 export class UsersController {
   //Injects the UsersService service to apply dependency injection.
   constructor(private readonly usersService: UsersService) {}
@@ -52,8 +52,8 @@ export class UsersController {
     return 'Just for admins!';
   }
 
-  // url path: //users/register
-  @Post('auth/register')
+  // url path: /auth/register
+  @Post('/register')
   //@Body() extracts the body of the HTTP request (e.g., registration data)
   //createUserDto is the object containing the validated data for the new user.
   // @Body() extracts the body of the HTTP request (e.g., registration data).
@@ -63,7 +63,7 @@ export class UsersController {
   }
 
   // SIGN IN
-  @Post('auth/login')
+  @Post('login')
   async signIn(
     @Req() req: Request,
     @Body() signInDto: SignInDto,
@@ -110,7 +110,7 @@ export class UsersController {
     await this.usersService.deleteSequence(sequenceId);
   }
 
-  // UODATE A SEQUENCE BY ID
+  // UPDATE A SEQUENCE BY ID
   @Patch(':id/sequences/:sequenceId')
   async updateSequence(
     @Param('sequenceId', new ParseUUIDPipe()) sequenceId: string,
