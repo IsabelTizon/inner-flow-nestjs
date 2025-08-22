@@ -39,7 +39,7 @@ import { UserRole } from '../models/user.model';
 import { Request } from 'express';
 import { Req } from '@nestjs/common';
 
-// url path: /auth
+// url path: /users
 @Controller('auth')
 export class UsersController {
   //Injects the UsersService service to apply dependency injection.
@@ -52,7 +52,7 @@ export class UsersController {
     return 'Just for admins!';
   }
 
-  // url path: /auth/register
+  // url path: //users/register
   @Post('/register')
   //@Body() extracts the body of the HTTP request (e.g., registration data)
   //createUserDto is the object containing the validated data for the new user.
