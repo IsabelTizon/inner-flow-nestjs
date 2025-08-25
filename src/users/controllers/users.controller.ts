@@ -52,7 +52,7 @@ export class UsersController {
     return 'Just for admins!';
   }
 
-  // url path: //users/register
+  // url path: /auth/register
   @Post('/register')
   //@Body() extracts the body of the HTTP request (e.g., registration data)
   //createUserDto is the object containing the validated data for the new user.
@@ -63,7 +63,7 @@ export class UsersController {
   }
 
   // SIGN IN
-  @Post('login')
+  @Post('/login')
   async signIn(
     @Req() req: Request,
     @Body() signInDto: SignInDto,
