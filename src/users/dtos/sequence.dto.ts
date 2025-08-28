@@ -1,4 +1,11 @@
-import { IsString, Length, IsArray, IsUUID, IsOptional } from 'class-validator';
+import {
+  IsString,
+  Length,
+  IsArray,
+  IsUUID,
+  IsOptional,
+  IsBoolean,
+} from 'class-validator';
 
 export class CreateSequenceDto {
   @IsString()
@@ -12,6 +19,10 @@ export class CreateSequenceDto {
   @IsString()
   @IsUUID()
   userId: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isPublic?: boolean;
 }
 
 export class UpdateSequenceDto {
@@ -28,4 +39,13 @@ export class UpdateSequenceDto {
   @IsOptional()
   @IsUUID()
   userId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isPublic?: boolean;
+}
+
+export class ShareSequenceDto {
+  @IsBoolean()
+  isPublic: boolean;
 }

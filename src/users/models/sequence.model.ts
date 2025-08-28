@@ -22,6 +22,9 @@ export class Sequence {
   @Column({ nullable: true })
   description?: string;
 
+  @Column({ default: false })
+  isPublic: boolean; // This allows users to mark their sequences as public for sharing
+
   //{ onDelete: 'CASCADE' }:  If the user is deleted, all sequences associated with him are also automatically deleted.
   // many sequences for one user
   @ManyToOne(() => User, (user) => user.sequences, { onDelete: 'CASCADE' })
