@@ -21,6 +21,7 @@ export class SequencesService {
     private readonly posesRepository: Repository<Poses>,
   ) {}
 
+  // GET /sequences/my-sequences - Get current user's sequences
   async getUserSequences(userId: string): Promise<Sequence[]> {
     return this.sequencesRepository.find({
       where: { user: { id: userId } },
@@ -28,6 +29,7 @@ export class SequencesService {
     });
   }
 
+  // POST /sequences - Create new sequence for current user
   async createSequence(
     userId: string,
     createSequenceDto: CreateSequenceDto,
@@ -52,6 +54,7 @@ export class SequencesService {
     return this.sequencesRepository.save(newSequence);
   }
 
+  // GET /sequences/:id - Get specific sequence
   async getSequence(sequenceId: string, userId: string): Promise<Sequence> {
     const sequence = await this.sequencesRepository.findOne({
       where: { id: sequenceId },
@@ -70,11 +73,13 @@ export class SequencesService {
     return sequence;
   }
 
+  // DELETE /sequences/:id - Delete sequence
   async deleteSequence(sequenceId: string, userId: string): Promise<void> {
     const sequence = await this.getSequence(sequenceId, userId);
     await this.sequencesRepository.remove(sequence);
   }
 
+  // POST /sequences/:id/poses - Add pose to sequence
   async addPoseToSequence(
     sequenceId: string,
     poseId: string,
@@ -114,6 +119,57 @@ export class SequencesService {
     // Remove the pose from the sequence
     sequence.poses = sequence.poses.filter((pose) => pose.id !== poseId);
 
+    return this.sequencesRepository.save(sequence);
+  }
+
+  // Public sequence methods
+  async getPublicSequences(): Promise<Sequence[]> {
+    return this.sequencesRepository.find({
+      where: { isPublic: true },
+      relations: ['poses', 'user'],
+      select: {
+        user: {
+          id: true,
+          name: true,
+          email: false, // Don't expose email
+        },
+      },
+    });
+  }
+
+  // DELETE /sequences/:id/poses/:poseId - Remove pose from sequence
+  async getPublicSequence(sequenceId: string): Promise<Sequence> {
+    const sequence = await this.sequencesRepository.findOne({
+      where: { id: sequenceId, isPublic: true },
+      relations: ['poses', 'user'],
+      select: {
+        user: {
+          id: true,
+          name: true,
+          email: false, // Don't expose email
+        },
+      },
+    });
+
+    if (!sequence) {
+      throw new NotFoundException('Public sequence not found');
+    }
+
+    return sequence;
+  }
+
+  // PATCH /sequences/:id/toggle-visibility - Toggle sequence public/private status
+
+  async toggleSequenceVisibility(
+    sequenceId: string,
+    userId: string,
+  ): Promise<Sequence> {
+    // Get the sequence (this will check ownership)
+    const sequence = await this.getSequence(sequenceId, userId);
+
+    // Toggle the public status
+    sequence.isPublic = !sequence.isPublic;
+    // Save the user sequence in the DDBB: isPublic:1/isNotPublic:0
     return this.sequencesRepository.save(sequence);
   }
 }
