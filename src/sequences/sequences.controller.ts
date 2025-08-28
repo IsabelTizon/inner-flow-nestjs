@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Delete,
+  Patch,
   Req,
   UseGuards,
   ParseUUIDPipe,
@@ -86,6 +87,18 @@ export class SequencesController {
     return this.sequencesService.removePoseFromSequence(
       sequenceId,
       poseId,
+      req.user.id,
+    );
+  }
+
+  // PATCH /sequences/:id/toggle-visibility - Toggle sequence public/private status
+  @Patch(':id/toggle-visibility')
+  async toggleSequenceVisibility(
+    @Param('id', ParseUUIDPipe) sequenceId: string,
+    @Req() req: AuthenticatedRequest,
+  ): Promise<Sequence> {
+    return this.sequencesService.toggleSequenceVisibility(
+      sequenceId,
       req.user.id,
     );
   }
