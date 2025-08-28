@@ -4,6 +4,7 @@ import { PosesModule } from './poses/poses.module';
 import { UsersModule } from './users/users.module';
 import { SequencesModule } from './sequences/sequences.module';
 import { ContactModule } from './contact/contact.module';
+import { PublicSequencesModule } from './community/publicSequences.module';
 
 // CONTROLLERS
 import { AppController } from './app.controller';
@@ -25,6 +26,7 @@ import { Sequence } from './users/models/sequence.model';
     UsersModule,
     SequencesModule,
     ContactModule,
+    PublicSequencesModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       // host: 'localhost',
