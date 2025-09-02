@@ -77,8 +77,12 @@ export class UsersService {
 
   // SIGN IN
   async signIn(signInDto: SignInDto): Promise<AuthResponse> {
+    // const existingUser = await this.usersRepository.findOne({
+    //   where: { email: signInDto.email },
+    // }); // This was the FULL User object with passwordHash
     const existingUser = await this.usersRepository.findOne({
       where: { email: signInDto.email },
+      select: ['id', 'name', 'email', 'role', 'passwordHash'], // Include passwordHash for validation
     });
 
     if (!existingUser) {
@@ -102,8 +106,18 @@ export class UsersService {
         role: existingUser.role,
       });
 
+      // return {
+      //   user: existingUser,
+      //   token,
+      // }; // This was the FULL User object with passwordHash
       return {
-        user: existingUser,
+        user: {
+          id: existingUser.id,
+          name: existingUser.name,
+          email: existingUser.email,
+          role: existingUser.role,
+          // NO passwordHash!
+        },
         token,
       };
     } catch (error) {
