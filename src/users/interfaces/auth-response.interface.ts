@@ -1,6 +1,6 @@
-import { User } from '../models/user.model';
+import { SafeUser } from './safe-user.interface';
 
 export interface AuthResponse {
-  user: User;
+  user: SafeUser; // User change to SafeUser to exclude sensitive fields as passwordHash
   token: string;
 }
