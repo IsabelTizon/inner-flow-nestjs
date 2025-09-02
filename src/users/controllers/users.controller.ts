@@ -68,8 +68,8 @@ export class UsersController {
     @Req() req: Request,
     @Body() signInDto: SignInDto,
   ): Promise<AuthResponse> {
-    console.log('Body:', req.body); // Here you see it raw
-    console.log('DTO validator:', signInDto); // Here you see it already processed by the ValidationPipe
+    // console.log('Body:', req.body); // Here you see it raw
+    // console.log('DTO validator:', signInDto); // Here you see it already processed by the ValidationPipe
     return await this.usersService.signIn(signInDto);
   }
 
