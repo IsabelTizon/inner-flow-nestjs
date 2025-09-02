@@ -20,4 +20,3 @@ export class ContactDto {
   @IsEmail()
   to: string;
 }
-
