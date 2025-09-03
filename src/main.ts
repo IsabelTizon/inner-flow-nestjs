@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import 'dotenv/config';
-// import { join } from 'path';
+import { join } from 'path';
+// import { resolve } from 'path';
 
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -13,12 +14,21 @@ async function bootstrap() {
   //app.useStaticAssets(...) tells NestJS that everything you put in the /public folder will be available via URL.
   // So, if you put an image in /public/img/poses/cat-pose.jpg, your frontend can access it at http://localhost:3000/img/poses/cat-pose.jpg.
 
-  app.useStaticAssets('/Users/Isa/Github/inner-flow-nestjs/public');
+  // app.useStaticAssets('/Users/Isa/Github/inner-flow-nestjs/public');
+  // app.useStaticAssets(join(__dirname, '..', 'public'), {
+  //   prefix: '/',
+  // });
+  // app.useStaticAssets(resolve(__dirname, '..', 'public'), {
+  //   prefix: '/',
+  // });
+  app.useStaticAssets(join(process.cwd(), 'public'), {
+    prefix: '/',
+  }); // process.cwd() stands for “current working directory”. It’s a Node.js method that returns the directory from which your Node process was launched
 
   // CORS: CORS added to allows frontend to request resources from different domain securely
   app.enableCors({
     origin: 'http://localhost:5173',
-    // origin: 'https://inner-flow.com',
+    // origin: 'https://inner-flow.vercel.app',
     credentials: true,
   });
 
