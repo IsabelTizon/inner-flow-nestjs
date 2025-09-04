@@ -1,20 +1,41 @@
 services:
   - type: web
     name: inner-flow-nestjs
-    env: node
+    runtime: node
     branch: master
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
     envVars:
       - key: DB_HOST
-        value: inner-flow-pg.aivencloud.com
+        value: inner-flow-postgresql-isa-projects.d.aivencloud.com
       - key: DB_PORT
-        value: 12345
+        value: 23851
       - key: DB_USERNAME
         value: avnadmin
       - key: DB_PASSWORD
-        value: your-secure-password
+        sync: false
       - key: DB_NAME
         value: defaultdb
       - key: PORT
         value: 3001
+
+  # services:
+  # - type: web
+  #   name: inner-flow-nestjs
+  #   env: node
+  #   branch: master
+  #   buildCommand: npm install && npm run build
+  #   startCommand: npm run start:prod
+  #   envVars:
+  #     - key: DB_HOST
+  #       value: inner-flow-pg.aivencloud.com
+  #     - key: DB_PORT
+  #       value: 12345
+  #     - key: DB_USERNAME
+  #       value: avnadmin
+  #     - key: DB_PASSWORD
+  #       value: your-secure-password
+  #     - key: DB_NAME
+  #       value: defaultdb
+  #     - key: PORT
+  #       value: 3001
