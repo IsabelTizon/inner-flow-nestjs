@@ -27,8 +27,8 @@ async function bootstrap() {
 
   // CORS: CORS added to allows frontend to request resources from different domain securely
   app.enableCors({
-    origin: 'http://localhost:5173',
-    // origin: 'https://inner-flow.vercel.app',
+    // origin: 'http://localhost:5173',
+    origin: 'https://inner-flow.vercel.app',
     credentials: true,
   });
 
