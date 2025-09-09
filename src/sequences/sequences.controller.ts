@@ -30,13 +30,11 @@ interface AuthenticatedRequest extends Request {
 export class SequencesController {
   constructor(private readonly sequencesService: SequencesService) {}
 
-  // GET /sequences/my-sequences - Get current user's sequences
   @Get('my-sequences')
   async getMySequences(@Req() req: AuthenticatedRequest): Promise<Sequence[]> {
     return this.sequencesService.getUserSequences(req.user.id);
   }
 
-  // POST /sequences - Create new sequence for current user
   @Post()
   async createSequence(
     @Req() req: AuthenticatedRequest,
@@ -54,7 +52,6 @@ export class SequencesController {
     return this.sequencesService.getSequence(sequenceId, req.user.id);
   }
 
-  // DELETE /sequences/:id - Delete sequence
   @Delete(':id')
   async deleteSequence(
     @Param('id', ParseUUIDPipe) sequenceId: string,
@@ -63,7 +60,6 @@ export class SequencesController {
     return this.sequencesService.deleteSequence(sequenceId, req.user.id);
   }
 
-  // POST /sequences/:id/poses - Add pose to sequence
   @Post(':id/poses')
   async addPoseToSequence(
     @Param('id', ParseUUIDPipe) sequenceId: string,
@@ -77,7 +73,6 @@ export class SequencesController {
     );
   }
 
-  // DELETE /sequences/:id/poses/:poseId - Remove pose from sequence
   @Delete(':id/poses/:poseId')
   async removePoseFromSequence(
     @Param('id', ParseUUIDPipe) sequenceId: string,

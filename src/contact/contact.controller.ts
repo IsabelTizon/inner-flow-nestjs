@@ -7,14 +7,13 @@ import { ContactDto } from './dtos/contact.dto';
 // SERVICE
 import { EmailService } from './services/email.service';
 
-@Controller('contact') //controller handle requests sent to the /contact route.
+@Controller('contact')
 export class ContactController {
   constructor(private readonly emailService: EmailService) {}
 
   @Post()
   @HttpCode(HttpStatus.OK)
   async sendContactMessage(
-    //sendContactMessage: sets the response code to 200 OK if the request succeeds.
     @Body() contactData: ContactDto,
   ): Promise<{ message: string }> {
     try {

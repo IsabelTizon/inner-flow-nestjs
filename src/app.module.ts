@@ -45,10 +45,10 @@ import { Sequence } from './users/models/sequence.model';
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'defaultdb',
       ssl: {
-        rejectUnauthorized: false, // This fixes the SSL certificate issue
+        rejectUnauthorized: false,
       },
       entities: [Poses, User, Sequence],
-      synchronize: true, // Only for development!
+      synchronize: true,
     }),
   ],
   controllers: [AppController],

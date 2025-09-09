@@ -1,16 +1,11 @@
-// MODULE + SERVICE + CONTROLLER
 import { Module } from '@nestjs/common';
 
-// CONTROLLER
 import { SequencesController } from './sequences.controller';
 
-// SERVICES
 import { SequencesService } from './sequences.service';
 
-// DDBB + ORM
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// MODELS
 import { Sequence } from '../users/models/sequence.model';
 import { User } from '../users/models/user.model';
 import { Poses } from '../poses/models/poses.model';
