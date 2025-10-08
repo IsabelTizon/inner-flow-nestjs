@@ -53,7 +53,7 @@ async function migrateData() {
   const pgClient = new Client(pgConfig);
 
   try {
-    console.log('�� Starting migration from SQLite to PostgreSQL...');
+    console.log('LOG: Starting migration from SQLite to PostgreSQL...');
 
     // Connect to PostgreSQL
     await pgClient.connect();
@@ -84,7 +84,7 @@ async function migrateData() {
     console.log(`LOG: Migrated ${poses.length} poses`);
 
     // Migrate users
-    console.log('�� Migrating users...');
+    console.log('LOG: Migrating users...');
     const users = await new Promise<User[]>((resolve, reject) => {
       sqliteDb.all('SELECT * FROM users', (err, rows) => {
         if (err) reject(err);

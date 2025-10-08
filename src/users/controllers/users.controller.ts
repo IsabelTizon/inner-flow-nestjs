@@ -103,7 +103,6 @@ export class UsersController {
 
   // DELETE A SEQUENCE BY ID
   @Delete(':id/sequences/:sequenceId')
-  // ParseUUIDPipe: Automatically validate that the value received as a parameter is a valid UUID.
   async deleteSequence(
     @Param('sequenceId', ParseUUIDPipe) sequenceId: string,
   ): Promise<void> {
